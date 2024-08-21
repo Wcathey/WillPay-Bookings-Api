@@ -4,7 +4,7 @@
 
 `<insert database schema design here>`
 
-![alt text](<project bnb.png>)
+![alt text](image.png)
 
 ## API Documentation
 
