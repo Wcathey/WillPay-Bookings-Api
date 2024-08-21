@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-`<insert database schema design here>`
+`<Database Schema pasted below>`
 
 ![alt text](image.png)
 
@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: false
 * Request
   * Method: GET
-  * Route path: /user/:id
+  * Route path: /currentUser
   * Body: none
 
 * Successful Response when there is a logged in user
@@ -92,8 +92,8 @@ information.
 
 * Require Authentication: false
 * Request
-  * Method: PUT
-  * Route path: /
+  * Method: GET
+  * Route path: /user/login
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -159,7 +159,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * Route path: /user
+  * Route path: /user/signup
   * Headers:
     * Content-Type: application/json
   * Body:
