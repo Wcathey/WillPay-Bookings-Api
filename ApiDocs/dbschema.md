@@ -21,7 +21,6 @@ TABLE spots {
   price FLOAT
   createdAt DATE
   updatedAt DATE
-  avgRating FLOAT
   previewImage STRING
 }
 

@@ -4,7 +4,7 @@
 
 `<Database Schema pasted below>`
 
-![alt text](image.png)
+![alt text](schema.png)
 
 ## API Documentation
 
