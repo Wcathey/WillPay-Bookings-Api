@@ -5,7 +5,7 @@ const cors = require('cors');
 const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-
+const { ValidationError } = require('sequelize');
 const { environment } = require('./config');
 const isProduction = environment === 'production';
 
@@ -14,14 +14,6 @@ const app = express();
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
-
-
-// 404 not found middleware
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.statusCode = 404;
-  next(err);
-});
 
 // Security Middleware
 if (!isProduction) {
@@ -52,31 +44,37 @@ if (!isProduction) {
   app.use(routes);
   
   // 404 middleware 
-  app.use((req, res, next) => {
-      const err = new Error('Not Found');
-      err.statusCode = 404;
-      next(err);
+  app.use((_req, _res, next) => {
+    const err = new Error("The requested resource couldn't be found.");
+    err.title = "Resource Not Found";
+    err.errors = { message: "The requested resource couldn't be found." };
+    err.status = 404;
+    next(err);
   });
   
-  // global error handling
-  app.use((err, req, res, next) => {
-      const statusCode = err.statusCode || 500;
-      const message = err.message || 'Internal Server Error';
-  
-      if (process.env.NODE_ENV !== 'production') {
-          console.error(err.stack);
-      }
-  
-      res.status(statusCode).json({
-          error: {
-              message: message,
-              stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined,
-          },
-      });
+// Process sequelize errors
+app.use((err, _req, _res, next) => {
+  // check if error is a Sequelize error:
+  if (err instanceof ValidationError) {
+    let errors = {};
+    for (let error of err.errors) {
+      errors[error.path] = error.message;
+    }
+    err.title = 'Validation error';
+    err.errors = errors;
+  }
+  next(err);
+});
+
+app.use((err, _req, res, _next) => {
+  res.status(err.status || 500);
+  console.error(err);
+  res.json({
+    title: err.title || 'Server Error',
+    message: err.message,
+    errors: err.errors,
+    stack: isProduction ? null : err.stack
   });
+});
 
-  const routes = require('./routes');
-
-  app.use(routes);
-
-  module.exports = app;
+module.exports = app;
