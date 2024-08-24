@@ -15,6 +15,14 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
+
+// 404 not found middleware
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.statusCode = 404;
+  next(err);
+});
+
 // Security Middleware
 if (!isProduction) {
     // enable cors only in development
@@ -38,6 +46,34 @@ if (!isProduction) {
       }
     })
   );
+
+
+  const routes = require('./routes');
+  app.use(routes);
+  
+  // 404 middleware 
+  app.use((req, res, next) => {
+      const err = new Error('Not Found');
+      err.statusCode = 404;
+      next(err);
+  });
+  
+  // global error handling
+  app.use((err, req, res, next) => {
+      const statusCode = err.statusCode || 500;
+      const message = err.message || 'Internal Server Error';
+  
+      if (process.env.NODE_ENV !== 'production') {
+          console.error(err.stack);
+      }
+  
+      res.status(statusCode).json({
+          error: {
+              message: message,
+              stack: process.env.NODE_ENV !== 'production' ? err.stack : undefined,
+          },
+      });
+  });
 
   const routes = require('./routes');
 
