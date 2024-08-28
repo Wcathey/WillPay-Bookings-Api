@@ -1,24 +1,21 @@
 // backend/routes/api/index.js
 const router = require('express').Router();
-const { setTokenCookie } = require('../../utils/auth');
-const { User } = require('../../db/models');
+const sessionRouter = require('./session.js');
+const usersRouter = require('./users.js');
 const { restoreUser } = require("../../utils/auth.js");
 
-// GET /api/set-token-cookie
-router.get('/set-token-cookie', async (_req, res) => {
-  const user = await User.findOne({
-    where: {
-      username: 'Demo-lition'
-    }
-  });
-  setTokenCookie(res, user);
-  return res.json({ user: user });
-});
 
-router.post('/test', function(req, res) {
-  res.json({ requestBody: req.body });
-});
 
+//use restoruser function to find user from db if exists or make user null
+//error will be thrown and not allow any other routes to be accessed that require login
 router.use(restoreUser);
+
+router.use('/session', sessionRouter);
+
+router.use('/users', usersRouter);
+
+router.post('/test', (req, res) => {
+  res.json({ requestBody: req.body});
+});
 
 module.exports = router;
