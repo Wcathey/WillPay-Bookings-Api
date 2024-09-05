@@ -16,13 +16,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       spotId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Spots",
+          key: "id"
+        }
       },
       url: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       preview: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
