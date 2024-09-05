@@ -1,31 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie } = require('../../utils/auth');
 const { User } = require('../../db/models');
+const { check } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/handleValidationErrors'); // Import the function
 
 const router = express.Router();
 
 
-router.post('/', async (req, res) => {
-    const { email, password, username } = req.body;
-    const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({ email, username, hashedPassword});
-
-    const safeUser = {
-        id: user.id,
-        firstName,
-        lastName,
-        email: user.email,
-        username: user.username,
-    };
-
-    await setTokenCookie(res, safeUser);
-
-    return res.json({
-        user: safeUser
-    });
-});
 
 const validateSignup = [
     check('email')
@@ -49,27 +31,30 @@ const validateSignup = [
 
 
   router.post(
-    '/',
-    validateSignup,
-    async (req, res) => {
-      const { email, password, username } = req.body;
-      const hashedPassword = bcrypt.hashSync(password);
-      const user = await User.create({ email, username, hashedPassword });
+    '/signup',
+    validateSignup, // Validation middleware
+    async (req, res, next) => { // Route handler function
+      try {
+        const { email, password, username } = req.body;
+        const hashedPassword = bcrypt.hashSync(password);
+        const user = await User.create({ email, username, hashedPassword });
   
-      const safeUser = {
-        id: user.id,
+        const safeUser = {
         firstName,
         lastName,
+        id: user.id,
         email: user.email,
         username: user.username,
-      };
+        };
   
-      await setTokenCookie(res, safeUser);
+        await setTokenCookie(res, safeUser);
   
-      return res.json({
-        user: safeUser
-      });
+        return res.json({ user: safeUser });
+      } catch (err) {
+        return next(err); // Pass errors to the next middleware
+      }
     }
   );
+  
 
 module.exports = router;

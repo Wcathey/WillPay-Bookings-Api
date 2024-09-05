@@ -6,7 +6,7 @@ const { setTokenCookie, restoreUser } = require('../../utils/auth');
 const { User } = require('../../db/models');
 
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors } = require('../../utils/handleValidationErrors');
 
 const router = express.Router();
 
@@ -34,6 +34,8 @@ router.post(
     }
 
     const safeUser = {
+      firstName,
+      lastName,
       id: user.id,
       email: user.email,
       username: user.username,
