@@ -1,12 +1,13 @@
 const express = require('express');
-const { Spot, SpotImage, User } = require('../../db/models');
+const { sequelize, Spot, SpotImage, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
 //Get all spots, req auth: false
 router.get('/', async (req, res) => {
-//still needs avgRating, previewImage
+//still needs avgRating,
+//previewImage needs to be just url not the entire model
     const allSpots = await Spot.findAll();
     res.json(allSpots)
 });
@@ -15,11 +16,23 @@ router.get('/current', requireAuth,  async (req, res, next) => {
     //still needs avgRating, previewImage
     const {user} = req
     const ownedSpots = await Spot.findAll({
+        include: {
+            model: SpotImage,
+            required: false,
+            attributes: ["url"],
+            where: {
+                preview: true
+            }
+        },
         where: {
             ownerId: user.id
-        }
+        },
+        attributes: {include: [sequelize.col('SpotImages.url'), 'previewImage']}
     });
+
+
     res.json(ownedSpots)
+
     });
 //Get details of Spot from an id, req auth: false
 router.get('/:spotId', async (req, res) => {
@@ -28,19 +41,20 @@ router.get('/:spotId', async (req, res) => {
 
         const specificSpot = await Spot.findByPk(req.params.spotId, {
 
-            include: [SpotImage, {
+            include: [{
+                model:SpotImage,
 
+            },{
                 model: User,
                 as: 'Owner',
                 attributes: ['id', 'firstName', 'lastName']
 
-            }
-
-        ]
+            }]
 
 
 
-        })
+
+        });
         res.json(specificSpot)
     } catch(error) {
         res.status(404);

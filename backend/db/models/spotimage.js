@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         models.Spot,
 
         {foreignKey: "spotId"}
-      )
+      );
+
     }
   }
   SpotImage.init({
@@ -30,13 +31,14 @@ module.exports = (sequelize, DataTypes) => {
     preview: {
       type: DataTypes.BOOLEAN,
       allowNull: false
-    }
+    },
+
   }, {
     sequelize,
     modelName: 'SpotImage',
     defaultScope: {
       attributes: {
-        exclude: ["createdAt", "updatedAt"]
+        exclude: ["spotId", "createdAt", "updatedAt"]
       }
     }
   });
