@@ -1,5 +1,5 @@
 const express = require('express');
-const { Spot, SpotImage } = require('../../db/models');
+const { Spot, SpotImage, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
@@ -25,9 +25,20 @@ router.get('/current', requireAuth,  async (req, res, next) => {
 router.get('/:spotId', async (req, res) => {
     try {
 
-        //still needs Owner details
+
         const specificSpot = await Spot.findByPk(req.params.spotId, {
-            include: SpotImage
+
+            include: [SpotImage, {
+
+                model: User,
+                as: 'Owner',
+                attributes: ['id', 'firstName', 'lastName']
+
+            }
+
+        ]
+
+
 
         })
         res.json(specificSpot)

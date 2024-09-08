@@ -12,10 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Spot.belongsTo(
-        models.User,
-        {
-          foreignKey: "ownerId"
-        }
+        models.User, {as: 'Owner'}
       );
       Spot.hasMany(
         models.Review,
@@ -89,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Spot',
-    
+
   });
   return Spot;
 };
