@@ -10,7 +10,11 @@ router.get('/', async (req, res) => {
 //still needs avgRating
     const allSpots = await Spot.findAll();
     const addImage = await addPreviewImage(allSpots, SpotImage);
+    if(addImage) {
     res.json(addImage)
+    } else  {
+        res.json(allSpots)
+    }
 });
 
 router.get('/current', requireAuth,  async (req, res, next) => {
@@ -22,8 +26,12 @@ router.get('/current', requireAuth,  async (req, res, next) => {
         },
     });
     const addImage = await addPreviewImage(ownedSpots, SpotImage);
+    if(addImage) {
     res.json(addImage)
-
+    }
+    else {
+        res.json(ownedSpots)
+    }
 
 
     });
@@ -31,7 +39,7 @@ router.get('/current', requireAuth,  async (req, res, next) => {
 router.get('/:spotId', async (req, res) => {
     try {
 
-
+        //add numReviews, avgStarRating
         const specificSpot = await Spot.findByPk(req.params.spotId, {
 
             include: [{
@@ -73,7 +81,7 @@ const newSpot = await Spot.create({
    name: name,
    description: description,
    price: price
- //previewImage: imageUrl (need to include from spotImage)
+ 
 });
 res.json(newSpot)
 });
