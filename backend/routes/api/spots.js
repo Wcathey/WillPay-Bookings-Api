@@ -1,7 +1,7 @@
 const express = require('express');
-const { sequelize, Spot, SpotImage, User } = require('../../db/models');
+const { sequelize, Spot, SpotImage, User, Review } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { addPreviewImage } = require('../../utils/helperFunctions');
+const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
 
 const router = express.Router();
 
@@ -20,18 +20,14 @@ router.get('/', async (req, res) => {
 router.get('/current', requireAuth,  async (req, res, next) => {
     //still needs avgRating
     const {user} = req
-    const ownedSpots = await Spot.findAll({
+    let ownedSpots = await Spot.findAll({
         where: {
             ownerId: user.id
         },
     });
-    const addImage = await addPreviewImage(ownedSpots, SpotImage);
-    if(addImage) {
-    res.json(addImage)
-    }
-    else {
-        res.json(ownedSpots)
-    }
+    const updatedSpot = await addPreviewImage(ownedSpots, SpotImage);
+    res.json(updatedSpot)
+
 
 
     });
@@ -81,7 +77,7 @@ const newSpot = await Spot.create({
    name: name,
    description: description,
    price: price
- 
+
 });
 res.json(newSpot)
 });
@@ -97,7 +93,7 @@ try{
         url: url,
         preview: preview
     });
-//added to SpotImage table but url needs to be added to Spot as previewImage
+
     res.json(image)
 } catch(error) {
     res.status(404);
