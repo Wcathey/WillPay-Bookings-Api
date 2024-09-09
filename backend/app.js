@@ -42,8 +42,8 @@ if (!isProduction) {
 
   const routes = require('./routes');
   app.use(routes);
-  
-  // 404 middleware 
+
+  // 404 middleware
   app.use((_req, _res, next) => {
     const err = new Error("The requested resource couldn't be found.");
     err.title = "Resource Not Found";
@@ -51,7 +51,7 @@ if (!isProduction) {
     err.status = 404;
     next(err);
   });
-  
+
 // Process sequelize errors
 app.use((err, _req, _res, next) => {
   // check if error is a Sequelize error:
@@ -60,8 +60,15 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
+
     err.title = 'Validation error';
     err.errors = errors;
+    if(errors.email || errors.username) {
+      err.status = 500
+      err.message = "User already Exists"
+    } else {
+      err.status = 400
+    }
   }
   next(err);
 });

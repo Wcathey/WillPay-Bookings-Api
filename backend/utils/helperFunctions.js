@@ -5,7 +5,7 @@ const e = require("express");
 async function addPreviewImage(spots, imageModel) {
 
     const updatedSpots = [];
-    for(let i = 0; i < spots.length; i++) {
+    for (let i = 0; i < spots.length; i++) {
 
         let spot = spots[i].toJSON();
         const spotImage = await imageModel.findByPk(spot.id, {
@@ -14,42 +14,42 @@ async function addPreviewImage(spots, imageModel) {
                 preview: true
             }
         });
+        if (spotImage) {
+            spot["previewImage"] = spotImage.dataValues.url
 
-        spot["previewImage"] = spotImage.dataValues.url
+        }
         updatedSpots.push(spot)
+    }
+    return updatedSpots
 
-    }
-    if(updatedSpots.length > 0) {
-    return updatedSpots;
-    }
-    else {
-        return spots
-    }
 }
 
 async function getReviewAvg(spots, reviewModel) {
     const updatedSpots = [];
     let sum;
-    for(let i = 0; i < spots.length; i++) {
-        let spot = spots[i].toJSON();
+    for (let i = 0; i < spots.length; i++) {
+        let spot = spots[i]
         const reviews = await reviewModel.findAll({
             attributes: ["stars"],
             where: {
                 spotId: spot.id
             }
         });
+        if(reviews) {
         reviews.forEach((review) => {
-            sum += review.stars
+            sum += Number(review.stars)
         })
-        const average = sum / reviews.length
-        spot["avgRating"] = average;
-        updatedSpots.push(spot)
+        let average = sum / reviews.length
+        if(average) {
+            spot["avgRating"] = average;
+        }
+        spot["avgRating"] = "no reviews"
     }
-    if(average) {
-    return updatedSpots
-    } else {
-        return spots
+    updatedSpots.push(spot)
     }
+   return updatedSpots
 }
 
-module.exports = {addPreviewImage, getReviewAvg}
+
+
+module.exports = { addPreviewImage, getReviewAvg }

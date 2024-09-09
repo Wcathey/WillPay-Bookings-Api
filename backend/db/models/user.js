@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Booking,
         {foreignKey: "userId", onDelete: "CASCADE", hooks: true}
       );
-     
+
     }
   };
 
@@ -41,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
               throw new Error("Cannot be an email.");
             }
           }
+        },
+        unique: {
+          args: true,
+          msg: "User with that username already exists"
         }
       },
       email: {
@@ -49,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           len: [3, 256],
           isEmail: true
+        },
+        unique: {
+          args: true,
+          msg: "User with that email already exists"
         }
       },
       hashedPassword: {

@@ -1,6 +1,7 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
+const { handleValidationErrors } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
 
 const router = express.Router();
@@ -10,11 +11,9 @@ router.get('/', async (req, res) => {
 //still needs avgRating
     const allSpots = await Spot.findAll();
     const addImage = await addPreviewImage(allSpots, SpotImage);
-    if(addImage) {
-    res.json(addImage)
-    } else  {
-        res.json(allSpots)
-    }
+    const addReviewAvg = await getReviewAvg(addImage, Review);
+    res.json(addReviewAvg)
+
 });
 
 router.get('/current', requireAuth,  async (req, res, next) => {
@@ -25,8 +24,9 @@ router.get('/current', requireAuth,  async (req, res, next) => {
             ownerId: user.id
         },
     });
-    const updatedSpot = await addPreviewImage(ownedSpots, SpotImage);
-    res.json(updatedSpot)
+    const addImage = await addPreviewImage(ownedSpots, SpotImage);
+    const addReviewAvg = await getReviewAvg(addImage, Review)
+    res.json(addReviewAvg)
 
 
 
@@ -36,30 +36,89 @@ router.get('/:spotId', async (req, res) => {
     try {
 
         //add numReviews, avgStarRating
-        const specificSpot = await Spot.findByPk(req.params.spotId, {
-
-            include: [{
-                model:SpotImage,
-
-            },{
-                model: User,
-                as: 'Owner',
-                attributes: ['id', 'firstName', 'lastName']
-
-            }]
-
-
-
-
+        const specificSpot = await Spot.findByPk(req.params.spotId);
+        const reviewCount = await Review.count({
+            where: {
+                spotId: req.params.spotId
+            }
+        })
+        const reviewSum = await Review.sum('stars', {
+            where: {
+                spotId: req.params.spotId
+            }
+        })
+        const jsonSpot = specificSpot.toJSON();
+        jsonSpot["numReviews"] = reviewCount;
+        jsonSpot['avgStarRating'] = (reviewSum / reviewCount) || 0;
+        const SpotImages = await SpotImage.findAll({
+            where: {
+                spotId: req.params.spotId
+            }
         });
-        res.json(specificSpot)
+        const Owner = await User.findAll({
+            attributes: ["id", "firstName", "lastName"],
+            where: {
+                id: jsonSpot.ownerId
+            }
+        });
+
+        res.json({...jsonSpot, SpotImages, Owner})
     } catch(error) {
+        console.error(error)
         res.status(404);
         res.json({message: "Spot couldn't be found"})
     }
 
 });
+// get all reviews by spots id
+router.get('/:spotId/reviews', async (res, req) => {
+   try {
+    const reviews = await Review.findAll({
+        include: [{
+            model: User,
+            attributes: ["id", "firstName", "lastName"],
 
+        }, ReviewImages],
+         where: {
+            spotId: req.params.spotId
+        }
+    })
+} catch(error) {
+    res.status(404);
+    res.json({message: "Spot couldn't be found"})
+}
+});
+
+//create a review for spot based on spot id
+router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
+    try {
+    const {user} = req;
+    const {review, stars} = req.body;
+    handleValidationErrors
+    const checkReviews = await Review.findAll({
+        where: {
+            userId: user.id,
+            spotId: req.params.spotId
+        }
+    })
+    if(checkReviews) {
+        res.status(500);
+        res.json({message: "User already has a review for this spot"})
+    }
+    else {
+        const newReview = await Review.create({
+            spotId: req.params.spotId,
+            review: review,
+            stars: stars
+    });
+    res.status(201);
+    res.json(newReview)
+}
+} catch(error) {
+    res.status(404);
+    res.json({message: "Spot could't be found"})
+}
+})
 
 
 //Create a Spot, req auth: true
@@ -79,6 +138,7 @@ const newSpot = await Spot.create({
    price: price
 
 });
+res.status(201)
 res.json(newSpot)
 });
 
@@ -93,8 +153,9 @@ try{
         url: url,
         preview: preview
     });
-
-    res.json(image)
+    const getImage = await SpotImage.findByPk(image.spotId)
+    res.status(201);
+    res.json(getImage);
 } catch(error) {
     res.status(404);
     res.json({message: "Spot couldn't be found"})
