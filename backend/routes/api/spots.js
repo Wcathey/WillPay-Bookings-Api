@@ -1,37 +1,30 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
+const { addPreviewImage } = require('../../utils/helperFunctions');
 
 const router = express.Router();
 
 //Get all spots, req auth: false
 router.get('/', async (req, res) => {
-//still needs avgRating,
-//previewImage needs to be just url not the entire model
+//still needs avgRating
     const allSpots = await Spot.findAll();
-    res.json(allSpots)
+    const addImage = await addPreviewImage(allSpots, SpotImage);
+    res.json(addImage)
 });
 
 router.get('/current', requireAuth,  async (req, res, next) => {
-    //still needs avgRating, previewImage
+    //still needs avgRating
     const {user} = req
     const ownedSpots = await Spot.findAll({
-        include: {
-            model: SpotImage,
-            required: false,
-            attributes: ["url"],
-            where: {
-                preview: true
-            }
-        },
         where: {
             ownerId: user.id
         },
-        attributes: {include: [sequelize.col('SpotImages.url'), 'previewImage']}
     });
+    const addImage = await addPreviewImage(ownedSpots, SpotImage);
+    res.json(addImage)
 
 
-    res.json(ownedSpots)
 
     });
 //Get details of Spot from an id, req auth: false
