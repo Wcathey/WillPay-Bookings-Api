@@ -12,5 +12,12 @@
     "sequelize": "^6.37.3",
     "sequelize-cli": "^6.6.2",
     "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "install": "npm --prefix backend install",
+    "dev:backend": "npm --prefix backend run dev",
+    "sequelize": "npx sequelize",
+    "start": "npm --prefix backend start",
+    "build": "npm --prefix backend run build"
   }
 }
