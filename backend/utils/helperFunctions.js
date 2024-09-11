@@ -26,30 +26,27 @@ async function addPreviewImage(spots, imageModel) {
 
 async function getReviewAvg(spots, reviewModel) {
     const updatedSpots = [];
-    let sum;
+
     for (let i = 0; i < spots.length; i++) {
         let spot = spots[i]
-        const reviews = await reviewModel.findAll({
-            attributes: ["stars"],
+        const reviewCount = await reviewModel.count({
             where: {
                 spotId: spot.id
             }
         });
-        if(reviews) {
-        reviews.forEach((review) => {
-            sum += Number(review.stars)
-        })
-        let average = sum / reviews.length
-        if(average) {
-            spot["avgRating"] = average;
-        }
-        spot["avgRating"] = "no reviews"
-    }
-    updatedSpots.push(spot)
-    }
-   return updatedSpots
-}
+        const reviewSum = await reviewModel.sum('stars', {
+            where: {
+                spotId: spot.id
+            }
+        });
 
+        spot["avgRating"] = (reviewSum / reviewCount) || 0;
+
+        updatedSpots.push(spot)
+    }
+    return updatedSpots
+
+}
 
 
 module.exports = { addPreviewImage, getReviewAvg }

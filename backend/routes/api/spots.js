@@ -1,5 +1,5 @@
 const express = require('express');
-const { sequelize, Spot, SpotImage, User, Review } = require('../../db/models');
+const { sequelize, Spot, SpotImage, User, Review, ReviewImage } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
@@ -8,16 +8,16 @@ const router = express.Router();
 
 //Get all spots, req auth: false
 router.get('/', async (req, res) => {
-//still needs avgRating
+
     const allSpots = await Spot.findAll();
     const addImage = await addPreviewImage(allSpots, SpotImage);
     const addReviewAvg = await getReviewAvg(addImage, Review);
     res.json(addReviewAvg)
 
 });
-
+//get all spots of current user
 router.get('/current', requireAuth,  async (req, res, next) => {
-    //still needs avgRating
+
     const {user} = req
     let ownedSpots = await Spot.findAll({
         where: {
@@ -35,7 +35,7 @@ router.get('/current', requireAuth,  async (req, res, next) => {
 router.get('/:spotId', async (req, res) => {
     try {
 
-        //add numReviews, avgStarRating
+
         const specificSpot = await Spot.findByPk(req.params.spotId);
         const reviewCount = await Review.count({
             where: {
@@ -71,42 +71,52 @@ router.get('/:spotId', async (req, res) => {
 
 });
 // get all reviews by spots id
-router.get('/:spotId/reviews', async (res, req) => {
+router.get('/:spotId/reviews', async (req, res, next) => {
    try {
     const reviews = await Review.findAll({
         include: [{
             model: User,
             attributes: ["id", "firstName", "lastName"],
 
-        }, ReviewImages],
+        }, ReviewImage],
          where: {
             spotId: req.params.spotId
         }
-    })
+    });
+    res.json(reviews)
 } catch(error) {
     res.status(404);
+    console.error(error)
     res.json({message: "Spot couldn't be found"})
 }
 });
 
 //create a review for spot based on spot id
 router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
-    try {
+
     const {user} = req;
     const {review, stars} = req.body;
-    handleValidationErrors
+
+    const checkSpotId = await Spot.findByPk(req.params.spotId)
+    if(!checkSpotId) {
+        res.status(404);
+        res.json({message: "Spot couldn't be found"})
+    }
     const checkReviews = await Review.findAll({
         where: {
             userId: user.id,
             spotId: req.params.spotId
         }
-    })
-    if(checkReviews) {
+    });
+
+
+    if(checkReviews.length > 0) {
         res.status(500);
         res.json({message: "User already has a review for this spot"})
     }
     else {
         const newReview = await Review.create({
+            userId: user.id,
             spotId: req.params.spotId,
             review: review,
             stars: stars
@@ -114,10 +124,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
     res.status(201);
     res.json(newReview)
 }
-} catch(error) {
-    res.status(404);
-    res.json({message: "Spot could't be found"})
-}
+
 })
 
 
@@ -169,7 +176,7 @@ try{
 router.put('/:spotId', requireAuth, async (req, res, next) => {
     try{
        const {address, city, state, country, lat, lng, name, description, price} = req.body
-       const updatedSpot = await Spot.update({
+       await Spot.update({
         address: address,
         city: city,
         state: state,
@@ -185,7 +192,9 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
             id: req.params.spotId
         }
     });
-    res.json(updatedSpot)
+    const updatedSpot = await Spot.findByPk(req.params.spotId);
+    return res.json(updatedSpot)
+
     } catch(error) {
         res.status(404);
         res.json({message: "Spot couldn't be found"})
@@ -195,16 +204,19 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
 //Delete a Spot, req auth: true
 router.delete('/:spotId', requireAuth, async (req, res, next) =>{
     try {
+        const {user} = req;
         await Spot.destroy({
             where: {
                 id: req.params.spotId
             }
+
         });
 
         res.json({message: "Successfully deleted"});
 
     } catch(error) {
         res.status(404)
+        console.error(error)
         res.json({message: "Spot couldn't be found"})
     }
 })
