@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config(); // load enviornment variables from .env into process.env
 require('express-async-errors'); // To catch async errors
 const morgan = require('morgan'); // Logging middleware
 const cors = require('cors'); // CORS for cross-origin requests
