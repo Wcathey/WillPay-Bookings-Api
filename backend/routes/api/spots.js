@@ -3,7 +3,7 @@ const { sequelize, Spot, SpotImage, User, Review, ReviewImage } = require('../..
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
-const { Spot, Booking } = require('../../db/models');
+const { Booking } = require('../../db/models');
 const router = express.Router();
 
 //Get all spots, req auth: false
