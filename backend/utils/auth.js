@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
-
+const csurf = require('csurf');
 const { secret, expiresIn } = jwtConfig;
 
 // Sends a JWT Cookie

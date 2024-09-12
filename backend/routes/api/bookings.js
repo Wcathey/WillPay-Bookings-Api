@@ -2,12 +2,17 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { setTokenCookie } = require('../../utils/auth');
 const { Spot, Booking, User } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation'); 
 
 const router = express.Router();
 
 
+
+// Import necessary models
+const { Spot, Booking, User } = require('../../db/models');
+const { requireAuth } = require('../../utils/auth');
 
 router.post('/:spotId/bookings', requireAuth, async (req, res) => {
   const { startDate, endDate } = req.body;
@@ -54,3 +59,5 @@ router.post('/:spotId/bookings', requireAuth, async (req, res) => {
 
   res.status(201).json(newBooking);
 });
+
+module.exports = router;
