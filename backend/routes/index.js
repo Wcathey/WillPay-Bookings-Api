@@ -4,7 +4,7 @@ const router = express.Router();
 // ...
 const apiRouter = require('./api');
 const spotsRouter = require('./api/spots');
-const bookingsRouter = require('./api/bookings'); // If you have a separate bookings router
+const bookingsRouter = require('./api/bookings'); 
 
 // GET /api/set-token-cookie
 const { setTokenCookie, restoreUser, requireAuth } = require('../utils/auth.js');
@@ -23,6 +23,7 @@ router.get('/api/csrf/restore', (req, res) => {
 router.use('/api', apiRouter);
 
 router.use('/spots', spotsRouter);
+router.use('/bookings', bookingsRouter);
 
 
 module.exports = router;
