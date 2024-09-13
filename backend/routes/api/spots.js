@@ -1,7 +1,7 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { handleValidationErrors, validateSpot } = require('../../utils/validation');
+const { handleValidationErrors, validateSpot, validateReview } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
 
 const router = express.Router();
@@ -92,7 +92,7 @@ router.get('/:spotId/reviews', async (req, res, next) => {
 });
 
 //create a review for spot based on spot id
-router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
+router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, next) => {
 
     const {user} = req;
     const {review, stars} = req.body;
