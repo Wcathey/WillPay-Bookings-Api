@@ -1,7 +1,7 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { handleValidationErrors } = require('../../utils/validation');
+const { handleValidationErrors, validateSpot } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
 
 const router = express.Router();
@@ -129,7 +129,7 @@ router.post('/:spotId/reviews', requireAuth, async (req, res, next) => {
 
 
 //Create a Spot, req auth: true
-router.post('/', requireAuth, async (req, res, next) => {
+router.post('/', requireAuth, validateSpot, async (req, res, next) => {
 const {user} = req
 const {address, city, state, country, lat, lng, name, description, price} = req.body
 const newSpot = await Spot.create({
@@ -227,7 +227,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
     try {
       const spotId = req.params.spotId;
       const { startDate, endDate } = req.body;
-  
+
       // Ensure that the spot exists
       const spot = await Spot.findByPk(spotId);
       if (!spot) {
@@ -236,7 +236,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
           statusCode: 404,
         });
       }
-  
+
       // Check if the current user is trying to book their own spot (unauthorized)
       if (spot.ownerId === req.user.id) {
         return res.status(403).json({
@@ -244,7 +244,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
           statusCode: 403,
         });
       }
-  
+
       // Check if there is an overlapping booking
       const existingBooking = await Booking.findOne({
         where: {
@@ -257,14 +257,14 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
           },
         },
       });
-  
+
       if (existingBooking) {
         return res.status(403).json({
           message: "Booking conflict: spot is already booked for the specified dates",
           statusCode: 403,
         });
       }
-  
+
       // Create the new booking
       const newBooking = await Booking.create({
         userId: req.user.id, // Current authenticated user
@@ -272,7 +272,7 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
         startDate: startDate,
         endDate: endDate,
       });
-  
+
       return res.status(201).json(newBooking);
     } catch (error) {
       next(error);
