@@ -89,6 +89,17 @@ const validateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors
 ]
+
+const validateSpotImage = [
+  check("url")
+    .exists({checkFalsy: true})
+    .withMessage("Url is required to add an image"),
+  check("preview")
+    .exists()
+    .isBoolean()
+    .withMessage("Preview must be set to true or false"),
+  handleValidationErrors
+]
 module.exports = {
-  handleValidationErrors, validateSignup, validateSpot, validateReview
+  handleValidationErrors, validateSignup, validateSpot, validateReview, validateSpotImage
 };

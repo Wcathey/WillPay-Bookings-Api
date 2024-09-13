@@ -1,8 +1,9 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { handleValidationErrors, validateSpot, validateReview } = require('../../utils/validation');
+const { handleValidationErrors, validateSpot, validateReview, validateSpotImage } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
+
 
 const router = express.Router();
 
@@ -150,10 +151,13 @@ res.json(newSpot)
 });
 
 //Add an Image to Spot based on Spot Id, req auth: true
-router.post('/:spotId/images', requireAuth, async (req, res, next) => {
-
-try{
-
+router.post('/:spotId/images', requireAuth, validateSpotImage, async (req, res, next) => {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if(!spot) {
+        res.status(404);
+        res.json({message: "Spot couldnt be found"})
+    }
+    else {
     const {url, preview} = req.body
     const image = await SpotImage.create({
         spotId: req.params.spotId,
@@ -163,11 +167,8 @@ try{
     const getImage = await SpotImage.findByPk(image.spotId)
     res.status(201);
     res.json(getImage);
-} catch(error) {
-    res.status(404);
-    res.json({message: "Spot couldn't be found"})
-}
 
+    }
 
 
 });
