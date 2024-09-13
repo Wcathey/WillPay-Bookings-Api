@@ -33,10 +33,13 @@ router.get('/current', requireAuth,  async (req, res, next) => {
     });
 //Get details of Spot from an id, req auth: false
 router.get('/:spotId', async (req, res) => {
-    try {
-
 
         const specificSpot = await Spot.findByPk(req.params.spotId);
+        if(!specificSpot) {
+            res.status(404);
+            res.json({message: "Spot couldnt be found"})
+            }
+        else {
         const reviewCount = await Review.count({
             where: {
                 spotId: req.params.spotId
@@ -63,16 +66,12 @@ router.get('/:spotId', async (req, res) => {
         });
 
         res.json({...jsonSpot, SpotImages, Owner})
-    } catch(error) {
-        console.error(error)
-        res.status(404);
-        res.json({message: "Spot couldn't be found"})
-    }
 
+    }
 });
 // get all reviews by spots id
 router.get('/:spotId/reviews', async (req, res, next) => {
-   try {
+
     const reviews = await Review.findAll({
         include: [{
             model: User,
@@ -83,12 +82,13 @@ router.get('/:spotId/reviews', async (req, res, next) => {
             spotId: req.params.spotId
         }
     });
-    res.json(reviews)
-} catch(error) {
-    res.status(404);
-    console.error(error)
-    res.json({message: "Spot couldn't be found"})
-}
+    if(!reviews) {
+        res.status(404);
+        res.json({message: "Spot couldnt be found"})
+    }
+    else {
+        res.json(reviews)
+    }
 });
 
 //create a review for spot based on spot id
@@ -173,10 +173,15 @@ try{
 });
 
 //Edit a Spot, req auth: true
-router.put('/:spotId', requireAuth, async (req, res, next) => {
-    try{
+router.put('/:spotId', requireAuth, validateSpot, async (req, res, next) => {
+    const spot = await Spot.findByPk(req.params.spotId);
+    if(!spot) {
+        res.status(404)
+        res.json({message: "Spot couldn't be found"})
+    }
+    else {
        const {address, city, state, country, lat, lng, name, description, price} = req.body
-       await Spot.update({
+     await Spot.update({
         address: address,
         city: city,
         state: state,
@@ -193,12 +198,9 @@ router.put('/:spotId', requireAuth, async (req, res, next) => {
         }
     });
     const updatedSpot = await Spot.findByPk(req.params.spotId);
-    return res.json(updatedSpot)
 
-    } catch(error) {
-        res.status(404);
-        res.json({message: "Spot couldn't be found"})
-    }
+    return res.json(updatedSpot)
+}
 });
 
 //Delete a Spot, req auth: true
