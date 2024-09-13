@@ -10,6 +10,8 @@ const setTokenCookie = (res, user) => {
     // Create the token.
     const safeUser = {
       id: user.id,
+      firstName: user.firstName,
+      lastName: user.firstName,
       email: user.email,
       username: user.username,
     };

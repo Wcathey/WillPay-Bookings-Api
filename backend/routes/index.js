@@ -4,6 +4,7 @@ const router = express.Router();
 const spotsRouter = require('./api/spots');
 const bookingsRouter = require('./api/bookings'); 
 const sessionRouter = require('./api/session');
+const usersRouter = require('./api/users');
 // GET /api/set-token-cookie
 const { setTokenCookie, restoreUser, requireAuth } = require('../utils/auth.js');
 const { User } = require('../db/models');
@@ -18,10 +19,11 @@ router.get('/api/csrf/restore', (req, res) => {
 });
   // ...
 
-// Mount the API routers directly under /api. Spots and bookings routes are now directly available under /api prefix. Simplified and fixed bookingsRouter reference error
+// Mounted the API routers directly under /api. Spots and bookings routes are now directly available under /api prefix. Simplified and fixed bookingsRouter reference error
 router.use('/api/spots', spotsRouter);
 router.use('/api/bookings', bookingsRouter);
 router.use('/api/session', sessionRouter);
+router.use('/api/users', usersRouter);
 
 
 module.exports = router;
