@@ -53,4 +53,5 @@ const validateSignup = [
     }
   );
 
+
 module.exports = router;
