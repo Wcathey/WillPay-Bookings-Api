@@ -1,7 +1,3 @@
-const e = require("express");
-
-
-
 async function addPreviewImage(spots, imageModel) {
 
     const updatedSpots = [];
