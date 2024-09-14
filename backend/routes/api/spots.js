@@ -1,9 +1,9 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { handleValidationErrors, validateSpot, validateReview, validateSpotImage } = require('../../utils/validation');
+const { handleValidationErrors, validateSpot, validateReview, validateSpotImage, validateBooking } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
-
+const {Op} = require('sequelize')
 
 const router = express.Router();
 
@@ -206,8 +206,12 @@ router.put('/:spotId', requireAuth, validateSpot, async (req, res, next) => {
 
 //Delete a Spot, req auth: true
 router.delete('/:spotId', requireAuth, async (req, res, next) =>{
-    try {
-        const {user} = req;
+    const spot = await Spot.findByPk(req.params.spotId);
+    if(!spot) {
+        res.status(404);
+        res.json({message: "Spot couldnt be found"});
+    }
+    else {
         await Spot.destroy({
             where: {
                 id: req.params.spotId
@@ -216,42 +220,33 @@ router.delete('/:spotId', requireAuth, async (req, res, next) =>{
         });
 
         res.json({message: "Successfully deleted"});
-
-    } catch(error) {
-        res.status(404)
-        console.error(error)
-        res.json({message: "Spot couldn't be found"})
     }
 })
 
 
 // POST /api/spots/:spotId/bookings - Create a booking for a spot
-router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
-    try {
-      const spotId = req.params.spotId;
-      const { startDate, endDate } = req.body;
+router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, next) => {
 
+
+      const { startDate, endDate } = req.body;
+      const {user} = req
       // Ensure that the spot exists
-      const spot = await Spot.findByPk(spotId);
+      const spot = await Spot.findByPk(req.params.spotId);
       if (!spot) {
-        return res.status(404).json({
-          message: "Spot couldn't be found",
-          statusCode: 404,
-        });
+       res.status(404);
+      return res.json({message: "Spot couldnt be found"})
       }
 
       // Check if the current user is trying to book their own spot (unauthorized)
-      if (spot.ownerId === req.user.id) {
-        return res.status(403).json({
-          message: "You cannot book your own spot",
-          statusCode: 403,
-        });
+     else if (spot.ownerId === user.id) {
+        res.status(403);
+       return res.json({message: "You can not book your own spot"})
       }
 
       // Check if there is an overlapping booking
       const existingBooking = await Booking.findOne({
         where: {
-          spotId: spotId,
+          spotId: req.params.spotId,
           startDate: {
             [Op.lte]: endDate, // Booking exists with start date before the end date of new booking
           },
@@ -262,23 +257,21 @@ router.post('/:spotId/bookings', requireAuth, async (req, res, next) => {
       });
 
       if (existingBooking) {
-        return res.status(403).json({
-          message: "Booking conflict: spot is already booked for the specified dates",
-          statusCode: 403,
-        });
-      }
+        res.status(403)
+        res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 
+      }
+      else {
       // Create the new booking
       const newBooking = await Booking.create({
-        userId: req.user.id, // Current authenticated user
-        spotId: spotId,
+        userId: user.id, // Current authenticated user
+        spotId: req.params.spotId,
         startDate: startDate,
         endDate: endDate,
       });
 
-      return res.status(201).json(newBooking);
-    } catch (error) {
-      next(error);
+      res.status(201)
+      res.json(newBooking)
     }
   });
 module.exports = router;

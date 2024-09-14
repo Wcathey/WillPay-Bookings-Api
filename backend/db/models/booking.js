@@ -35,14 +35,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: Sequelize.literal("CURRENT_TIMESTAMP")
+       isAfter: new Date().toString()
       }
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
       validate: {
-        isAfter: this.startDate
+        isAfter: new Date().toString()
       }
     }
   }, {

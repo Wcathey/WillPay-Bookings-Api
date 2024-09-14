@@ -1,6 +1,7 @@
 // backend/utils/validation.js
 const { validationResult } = require('express-validator');
 const { check } = require('express-validator');
+const { Sequelize } = require('../db/models');
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
 const handleValidationErrors = (req, _res, next) => {
@@ -93,6 +94,7 @@ const validateReview = [
 const validateSpotImage = [
   check("url")
     .exists({checkFalsy: true})
+    .isURL()
     .withMessage("Url is required to add an image"),
   check("preview")
     .exists()
@@ -100,6 +102,26 @@ const validateSpotImage = [
     .withMessage("Preview must be set to true or false"),
   handleValidationErrors
 ]
+
+const validateBooking = [
+  check("startDate")
+    .exists({checkFalsy: true})
+    .isDate()
+    .withMessage("startDate cannot be in the past"),
+  check("endDate")
+    .exists({checkFalsy: true})
+    .isDate()
+    .withMessage("endDate cannot be on or before startDate"),
+  handleValidationErrors
+]
+
+const validateReviewImage = [
+  check("url")
+    .exists({checkFalsy: true})
+    .isURL()
+    .withMessage("Url is required when adding an image to Review"),
+    handleValidationErrors
+]
 module.exports = {
-  handleValidationErrors, validateSignup, validateSpot, validateReview, validateSpotImage
+  handleValidationErrors, validateSignup, validateSpot, validateReview, validateSpotImage, validateBooking, validateReviewImage
 };
