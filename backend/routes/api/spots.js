@@ -8,66 +8,53 @@ const {Op} = require('sequelize')
 const router = express.Router();
 
 //Get all spots, req auth: false
-router.get('/', validateQueryParams, async (req, res) => {
-    let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
-    if(!page) {
-        page = 1
-    }
-    if(!size) {
-        size = 20
-    }
-    if(minLat) {
-        minLat = {
-            [Op.or]: {
-                [Op.gt]: minLat,
-                [Op.eq]: minLat,
+router.get('/', validateQueryParams, validateQueryParams, async (req, res) => {
+    let {page = 1, size = 20, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+    let allSpots;
 
-            }
-        }
-    }
-    if(maxLat) {
-        maxLat = {
-            [Op.or]: {
-                [Op.lt]: maxLat,
-                [Op.eq]: maxLat
-            }
-        }
-    }
-    if(minLng) {
-       minLng = {
-            [Op.or]: {
-                [Op.gt]: minLng,
-                [Op.eq]: minLng,
+    if(page) page = parseInt(page);
+    if(size) size = parseInt(size)
+    if(minLat === maxLat)
+    if(minLng === maxLng) minLng = maxLng;
+    if(minPrice === maxPrice) minPrice = maxPrice;
+    if(minLat || maxLat || minLng || maxLng || minPrice || maxPrice) {
+    allSpots = await Spot.findAll({
+        where: {
+            [Op.or]: [
+                {
+                    lat: {
+                        [Op.or]: {
+                            [Op.gte]: minLat,
+                            [Op.lte]: maxLat
+                        }
+                    }
 
-            }
+                },
+                {
+                    lng: {
+                        [Op.or]: {
+                            [Op.gte]: minLng,
+                            [Op.lte]: maxLng
+                    }
+                }
+            },
+                {
+                    price: {
+                        [Op.or]: {
+                            [Op.gte]:minPrice,
+                            [Op.lte]: maxPrice
+                        }
+                    }
+                }
+            ]
+
         }
     }
-    if(maxLng){
-        maxLng = {
-            [Op.or]: {
-                [Op.lt]: maxLng,
-                [Op.eq]: maxLng
-            }
-        }
-    }
-    if(minPrice) {
-        minPrice = {
-            [Op.or]: {
-                [Op.gt]: minPrice,
-                [Op.eq]: minPrice
-            }
-        }
-    }
-    if(maxPrice) {
-        maxPrice = {
-            [Op.or]: {
-                [Op.lt]: maxPrice,
-                [Op.eq]: maxPrice
-            }
-        }
-    }
-    const allSpots = await Spot.findAll(
     );
+}
+    else {
+        allSpots = await Spot.findAll();
+    }
     const addImage = await addPreviewImage(allSpots, SpotImage);
     const Spots = await getReviewAvg(addImage, Review);
     res.json({Spots, page, size})
