@@ -118,7 +118,6 @@ const validateBooking = [
 const validateReviewImage = [
   check("url")
     .exists({checkFalsy: true})
-    .isURL()
     .withMessage("Url is required when adding an image to Review"),
     handleValidationErrors
 ]

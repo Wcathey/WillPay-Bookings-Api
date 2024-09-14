@@ -26,7 +26,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
    res.json(reviews)
 });
 //Add image to review based on reviews id
-router.post('/:reviewId/images', requireAuth, validateReviewImage, async (req, res, next) => {
+router.post('/:reviewId/images', requireAuth,  async (req, res, next) => {
     const {url} = req.body;
     const {user} = req;
     const checkReviewId = await Review.findByPk(req.params.reviewId);
