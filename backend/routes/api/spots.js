@@ -310,10 +310,6 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
     if (!spot) {
         return res.status(404).json({ message: "Spot couldn't be found" });
     }
-    if(userId !== spot.ownerId) {
-        res.status(403);
-        res.json({message: "Forbidden"})
-    }
 
     let bookings;
     if (spot.ownerId === userId) {
@@ -369,8 +365,16 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
           },
         },
       });
+      const startOnEndDate = await Booking.findOne({
+        where: {
+            spotId: req.params.spotId,
+            startDate: {
+                [Op.eq]: endDate
+            }
+        }
+      });
 
-      if (existingBooking) {
+      if (existingBooking || startOnEndDate) {
         res.status(403)
         res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 

@@ -2,7 +2,7 @@ const express = require('express');
 const { Spot, Booking, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
-
+const {Op} = require('sequelize')
 const router = express.Router();
 
 
@@ -39,7 +39,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
         return res.status(403).json({ message: "Forbidden" });
     }
 
-    if (new Date(booking.endDate) < new Date()) {
+    if (new Date(booking.endDate).getTime() < new Date().getTime()) {
         return res.status(400).json({ message: "Cannot edit past bookings." });
     }
 
@@ -47,26 +47,35 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     const conflictingBooking = await Booking.findOne({
         where: {
             spotId: booking.spotId,
-            [Op.or]: [
-                {
-                    startDate: {
-                        [Op.between]: [startDate, endDate]
-                    }
-                },
-                {
-                    endDate: {
-                        [Op.between]: [startDate, endDate]
-                    }
+            startDate: {
+                [Op.lte]: endDate, // Booking exists with start date before the end date of new booking
+              },
+              endDate: {
+                [Op.gte]: startDate, // Booking exists with end date after the start date of new booking
+              },
+            },
+          });
+          const startOnEndDate = await Booking.findOne({
+            where: {
+                spotId: booking.spotId,
+                [Op.or]: [{
+                startDate: {
+                    [Op.eq]: endDate
                 }
-            ],
-            id: { [Op.ne]: bookingId }
-        }
-    });
+            },{
+                endDate: {
+                    [Op.eq]: startDate
+                }
+                }
+            ]
+            }
+          });
 
-    if (conflictingBooking) {
-        return res.status(403).json({ message: "Conflicting booking exists for the specified dates." });
-    }
+          if (conflictingBooking|| startOnEndDate) {
+            res.status(403)
+            res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 
+          }
     // Update the booking
     booking.startDate = startDate;
     booking.endDate = endDate;
