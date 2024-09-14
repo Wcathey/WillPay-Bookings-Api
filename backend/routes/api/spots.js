@@ -1,19 +1,76 @@
 const express = require('express');
 const { sequelize, Spot, SpotImage, User, Review, ReviewImage, Booking } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
-const { handleValidationErrors, validateSpot, validateReview, validateSpotImage, validateBooking } = require('../../utils/validation');
+const { validateQueryParams, validateSpot, validateReview, validateSpotImage, validateBooking } = require('../../utils/validation');
 const { addPreviewImage, getReviewAvg } = require('../../utils/helperFunctions');
 const {Op} = require('sequelize')
 
 const router = express.Router();
 
 //Get all spots, req auth: false
-router.get('/', async (req, res) => {
+router.get('/', validateQueryParams, async (req, res) => {
+    let {page, size, minLat, maxLat, minLng, maxLng, minPrice, maxPrice} = req.query;
+    if(!page) {
+        page = 1
+    }
+    if(!size) {
+        size = 20
+    }
+    if(minLat) {
+        minLat = {
+            [Op.or]: {
+                [Op.gt]: minLat,
+                [Op.eq]: minLat,
 
-    const allSpots = await Spot.findAll();
+            }
+        }
+    }
+    if(maxLat) {
+        maxLat = {
+            [Op.or]: {
+                [Op.lt]: maxLat,
+                [Op.eq]: maxLat
+            }
+        }
+    }
+    if(minLng) {
+       minLng = {
+            [Op.or]: {
+                [Op.gt]: minLng,
+                [Op.eq]: minLng,
+
+            }
+        }
+    }
+    if(maxLng){
+        maxLng = {
+            [Op.or]: {
+                [Op.lt]: maxLng,
+                [Op.eq]: maxLng
+            }
+        }
+    }
+    if(minPrice) {
+        minPrice = {
+            [Op.or]: {
+                [Op.gt]: minPrice,
+                [Op.eq]: minPrice
+            }
+        }
+    }
+    if(maxPrice) {
+        maxPrice = {
+            [Op.or]: {
+                [Op.lt]: maxPrice,
+                [Op.eq]: maxPrice
+            }
+        }
+    }
+    const allSpots = await Spot.findAll(
+    );
     const addImage = await addPreviewImage(allSpots, SpotImage);
-    const addReviewAvg = await getReviewAvg(addImage, Review);
-    res.json(addReviewAvg)
+    const Spots = await getReviewAvg(addImage, Review);
+    res.json({Spots, page, size})
 
 });
 //get all spots of current user
@@ -22,9 +79,10 @@ router.get('/current', requireAuth,  async (req, res, next) => {
     const {user} = req
     let ownedSpots = await Spot.findAll({
         where: {
-            ownerId: user.id
-        },
-    });
+            ownerId: user.id,
+
+        }
+});
     const addImage = await addPreviewImage(ownedSpots, SpotImage);
     const addReviewAvg = await getReviewAvg(addImage, Review)
     res.json(addReviewAvg)
