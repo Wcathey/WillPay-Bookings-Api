@@ -26,14 +26,18 @@ router.get('/current', requireAuth, async (req, res, next) => {
    res.json(reviews)
 });
 //Add image to review based on reviews id
-router.post('/:reviewId/images', requireAuth, validateReviewImage, async (req, res, next) => {
+router.post('/:reviewId/images', requireAuth,  async (req, res, next) => {
     const {url} = req.body;
+    const {user} = req;
     const checkReviewId = await Review.findByPk(req.params.reviewId);
     if(!checkReviewId) {
         res.status(404);
         res.json({message: "Review couldn't be found"})
     }
-
+    if(user.id !== checkReviewId.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"})
+    }
 
     const reviewImageAmount = await ReviewImage.count();
     if(reviewImageAmount === 10) {
@@ -56,10 +60,15 @@ router.post('/:reviewId/images', requireAuth, validateReviewImage, async (req, r
 //Update and return an existing review
 router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => {
     const {review, stars} = req.body;
+    const {user} = req;
     const updatedReview = await Review.findByPk(req.params.reviewId);
     if(!updatedReview) {
         res.status(404);
         res.json({message: "Review couldn't be found"})
+    }
+    if(user.id !== updatedReview.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"});
     }
     else {
     await Review.update(
@@ -80,10 +89,15 @@ router.put('/:reviewId', requireAuth, validateReview, async (req, res, next) => 
 
 //delete an existing review
 router.delete('/:reviewId', requireAuth, async (req, res, next) => {
+    const {user} = req;
     const review = await Review.findByPk(req.params.reviewId);
     if(!review) {
         res.status(404);
         res.json({message: 'Review couldnt be found'})
+    }
+    if(user.id !== review.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"})
     }
     else {
         await Review.destroy({
