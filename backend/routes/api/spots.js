@@ -161,6 +161,10 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
         res.status(404);
         res.json({message: "Spot couldn't be found"})
     }
+    if(user.id !== checkSpotId.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"})
+    }
     const checkReviews = await Review.findAll({
         where: {
             userId: user.id,
@@ -210,10 +214,15 @@ res.json(newSpot)
 
 //Add an Image to Spot based on Spot Id, req auth: true
 router.post('/:spotId/images', requireAuth, validateSpotImage, async (req, res, next) => {
+    const {user} = req;
     const spot = await Spot.findByPk(req.params.spotId);
     if(!spot) {
         res.status(404);
         res.json({message: "Spot couldnt be found"})
+    }
+    if(user.id !== spot.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"});
     }
     else {
     const {url, preview} = req.body
@@ -233,10 +242,15 @@ router.post('/:spotId/images', requireAuth, validateSpotImage, async (req, res, 
 
 //Edit a Spot, req auth: true
 router.put('/:spotId', requireAuth, validateSpot, async (req, res, next) => {
+    const {user} = req
     const spot = await Spot.findByPk(req.params.spotId);
     if(!spot) {
         res.status(404)
         res.json({message: "Spot couldn't be found"})
+    }
+    if(user.id !== spot.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"});
     }
     else {
        const {address, city, state, country, lat, lng, name, description, price} = req.body
@@ -291,6 +305,10 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
     if (!spot) {
         return res.status(404).json({ message: "Spot couldn't be found" });
     }
+    if(userId !== spot.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"})
+    }
 
     let bookings;
     if (spot.ownerId === userId) {
@@ -321,6 +339,10 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
       if (!spot) {
        res.status(404);
       return res.json({message: "Spot couldnt be found"})
+      }
+      if(user.id !== spot.userId) {
+        res.status(403);
+        res.json({message: "Forbidden"})
       }
 
       // Check if the current user is trying to book their own spot (unauthorized)

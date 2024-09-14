@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 // Get all of the current user's bookings
-router.get('/current', requireAuth, async (req, res) => {
+router.get('/current', requireAuth, async (req, res, next) => {
     const userId = req.user.id;
 
     const bookings = await Booking.findAll({
@@ -36,7 +36,7 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
     }
 
     if (booking.userId !== userId) {
-        return res.status(403).json({ message: "You do not have permission to edit this booking." });
+        return res.status(403).json({ message: "Forbidden" });
     }
 
     if (new Date(booking.endDate) < new Date()) {
