@@ -281,6 +281,34 @@ router.delete('/:spotId', requireAuth, async (req, res, next) =>{
     }
 })
 
+// Get all bookings for a Spot based on the Spot's id
+router.get('/:spotId/bookings', requireAuth, async (req, res) => {
+    const { spotId } = req.params;
+    const userId = req.user.id;
+
+    const spot = await Spot.findByPk(spotId);
+
+    if (!spot) {
+        return res.status(404).json({ message: "Spot couldn't be found" });
+    }
+
+    let bookings;
+    if (spot.ownerId === userId) {
+        // If the user is the owner, return detailed booking data
+        bookings = await Booking.findAll({
+            where: { spotId },
+            include: { model: User, attributes: ['id', 'firstName', 'lastName'] }
+        });
+    } else {
+        // Otherwise, return only basic booking data
+        bookings = await Booking.findAll({
+            where: { spotId },
+            attributes: ['spotId', 'startDate', 'endDate']
+        });
+    }
+
+    return res.json({ bookings });
+});
 
 // POST /api/spots/:spotId/bookings - Create a booking for a spot
 router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, next) => {
