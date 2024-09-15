@@ -2,7 +2,8 @@ const express = require('express');
 const { Spot, Booking, User } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const { handleValidationErrors } = require('../../utils/validation');
-const {Op} = require('sequelize')
+const {Op} = require('sequelize');
+const { ResultWithContextImpl } = require('express-validator/lib/chain');
 const router = express.Router();
 
 
@@ -39,39 +40,57 @@ router.put('/:bookingId', requireAuth, async (req, res) => {
         return res.status(403).json({ message: "Forbidden" });
     }
 
-    if (new Date(booking.endDate).getTime() < new Date().getTime()) {
-        return res.status(400).json({ message: "Cannot edit past bookings." });
-    }
 
     // Check for conflicting bookings
-    const conflictingBooking = await Booking.findOne({
-        where: {
-            spotId: booking.spotId,
-            startDate: {
-                [Op.lte]: endDate, // Booking exists with start date before the end date of new booking
-              },
-              endDate: {
-                [Op.gte]: startDate, // Booking exists with end date after the start date of new booking
-              },
-            },
-          });
-          const startOnEndDate = await Booking.findOne({
-            where: {
-                spotId: booking.spotId,
-                [Op.or]: [{
-                startDate: {
-                    [Op.eq]: endDate
-                }
-            },{
-                endDate: {
-                    [Op.eq]: startDate
-                }
-                }
-            ]
-            }
-          });
+ const conflictingBooking = await Booking.findOne({
+    where: {
+        id: {
+            [Op.ne]: bookingId
+        },
+        [Op.or]: [{
 
-          if (conflictingBooking|| startOnEndDate) {
+            startDate: {
+                [Op.lte]: new Date(startDate).toString()
+            },
+            endDate: {[Op.gte]: new Date(endDate).toString()
+            }
+        },
+        {
+            startDate: {
+                [Op.gte]: new Date(startDate).toString()
+            },
+            endDate: {
+                [Op.lte]: new Date(endDate).toString()
+            }
+        },
+        {
+            startDate: {
+                [Op.eq]: new Date(startDate).toString()
+            }
+        },
+        {
+            startDate: {
+                [Op.eq]: new Date(endDate).toString()
+            }
+        },
+        {
+            endDate: {
+                [Op.eq]: new Date(startDate).toString()
+            }
+        },
+        {
+            endDate: {
+                [Op.eq]: new Date(endDate).toString()
+            }
+        }]
+
+    }
+
+
+ })
+console.log(conflictingBooking)
+
+          if (conflictingBooking) {
             res.status(403)
             res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 
