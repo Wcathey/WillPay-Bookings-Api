@@ -1,5 +1,5 @@
 const express = require('express');
-const { Review, User, Spot, SpotImage, ReviewImage } = require('../../db/models');
+const { Review, User, Spot, SpotImage, ReviewImage, sequelize } = require('../../db/models');
 const { requireAuth } = require('../../utils/auth');
 const {addPreviewImage} = require('../../utils/helperFunctions');
 const {validateReviewImage, validateReview} = require('../../utils/validation');

@@ -117,7 +117,12 @@ router.get('/:spotId', async (req, res) => {
 });
 // get all reviews by spots id
 router.get('/:spotId/reviews', async (req, res, next) => {
-
+    const spot = await Spot.findByPk(req.params.spotId);
+    if(!spot) {
+        res.status(404);
+        res.json({message: "Spot couldnt be found"})
+    }
+    else {
     const reviews = await Review.findAll({
         include: [{
             model: User,
@@ -128,13 +133,9 @@ router.get('/:spotId/reviews', async (req, res, next) => {
             spotId: req.params.spotId
         }
     });
-    if(!reviews) {
-        res.status(404);
-        res.json({message: "Spot couldnt be found"})
-    }
-    else {
         res.json(reviews)
-    }
+}
+
 });
 
 //create a review for spot based on spot id
@@ -147,10 +148,6 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
     if(!checkSpotId) {
         res.status(404);
         res.json({message: "Spot couldn't be found"})
-    }
-    if(user.id !== checkSpotId.ownerId) {
-        res.status(403);
-        res.json({message: "Forbidden"})
     }
     const checkReviews = await Review.findAll({
         where: {
@@ -280,7 +277,6 @@ router.delete('/:spotId', requireAuth, async (req, res, next) =>{
             where: {
                 id: req.params.spotId
             }
-
         });
 
         res.json({message: "Successfully deleted"});
@@ -355,13 +351,20 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
       const startOnEndDate = await Booking.findOne({
         where: {
             spotId: req.params.spotId,
-            startDate: {
-                [Op.eq]: endDate
+            startDate:{
+                        [Op.eq]: endDate
+                    }
+                }
+      });
+      const endOnStartDate = await Booking.findOne({
+        where: {
+            spotId: req.params.spotId,
+            endDate: {
+                [Op.eq]: startDate
             }
         }
-      });
-
-      if (existingBooking || startOnEndDate) {
+      })
+      if (existingBooking || startOnEndDate || endOnStartDate) {
         res.status(403)
         res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 
