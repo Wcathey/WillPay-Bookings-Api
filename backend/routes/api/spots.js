@@ -341,30 +341,27 @@ router.post('/:spotId/bookings', requireAuth, validateBooking, async (req, res, 
         where: {
           spotId: req.params.spotId,
           startDate: {
-            [Op.lte]: endDate, // Booking exists with start date before the end date of new booking
+            [Op.lt]: endDate, // Booking exists with start date before the end date of new booking
           },
           endDate: {
             [Op.gte]: startDate, // Booking exists with end date after the start date of new booking
           },
         },
       });
+      //start date is on existing end date
       const startOnEndDate = await Booking.findOne({
         where: {
             spotId: req.params.spotId,
-            startDate:{
-                        [Op.eq]: endDate
-                    }
-                }
-      });
-      const endOnStartDate = await Booking.findOne({
-        where: {
-            spotId: req.params.spotId,
             endDate: {
-                [Op.eq]: startDate
+                [Op.eq]: new Date(startDate).toString()
             }
+
+
         }
-      })
-      if (existingBooking || startOnEndDate || endOnStartDate) {
+      });
+      console.log(startOnEndDate)
+
+      if (existingBooking || startOnEndDate) {
         res.status(403)
         res.json({message: "Booking conflict: spot is already booked for the specified dates" })
 
