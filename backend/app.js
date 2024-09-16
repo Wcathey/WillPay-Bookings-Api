@@ -80,13 +80,12 @@ app.use((err, _req, res, _next) => {
     res.json({
       message: err.message
     })
+  }
   if(isProduction) {
     res.json({
       message: err.message,
       errors: err.errors
     })
-  }
-
   }
   else {
   res.json({
