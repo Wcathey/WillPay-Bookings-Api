@@ -12,7 +12,7 @@ router.get('/current', requireAuth, async (req, res, next) => {
         include: [
             {
                 model: User,
-                attributes: ["id", "firstName", "lastname"],
+                attributes: ["id", "firstName", "lastName"],
                 where: {
                     id: user.id
                 },

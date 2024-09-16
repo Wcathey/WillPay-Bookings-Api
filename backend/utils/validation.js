@@ -58,6 +58,9 @@ const validateSpot = [
   check("state")
     .exists({checkFalsy: true})
     .withMessage("State is required"),
+  check('country')
+    .exists({checkFalsy: true})
+    .withMessage("Country is required"),
   check('lat')
     .exists({checkFalsy: true})
     .isFloat({min: -90, max: 90})

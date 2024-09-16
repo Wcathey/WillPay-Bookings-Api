@@ -158,7 +158,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res, ne
 
 
     if(checkReviews.length > 0) {
-        res.status(403);
+        res.status(500);
         res.json({message: "User already has a review for this spot"})
     }
     else {
@@ -294,22 +294,22 @@ router.get('/:spotId/bookings', requireAuth, async (req, res) => {
         return res.status(404).json({ message: "Spot couldn't be found" });
     }
 
-    let bookings;
+    let Bookings;
     if (spot.ownerId === userId) {
         // If the user is the owner, return detailed booking data
-        bookings = await Booking.findAll({
+        Bookings = await Booking.findAll({
             where: { spotId },
             include: { model: User, attributes: ['id', 'firstName', 'lastName'] }
         });
     } else {
         // Otherwise, return only basic booking data
-        bookings = await Booking.findAll({
+        Bookings = await Booking.findAll({
             where: { spotId },
             attributes: ['spotId', 'startDate', 'endDate']
         });
     }
 
-    return res.json({ bookings });
+    return res.json({ Bookings });
 });
 
 // POST /api/spots/:spotId/bookings - Create a booking for a spot

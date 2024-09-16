@@ -60,6 +60,7 @@ app.use((err, _req, _res, next) => {
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
+
     err.title = 'Validation error';
     err.errors = errors;
     if(errors.email || errors.username) {
@@ -75,11 +76,17 @@ app.use((err, _req, _res, next) => {
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
+  if(isProduction && (err.status === 401 || 404)){
+    res.json({
+      message: err.message
+    })
   if(isProduction) {
     res.json({
       message: err.message,
-      errors:err.errors
+      errors: err.errors
     })
+  }
+
   }
   else {
   res.json({
