@@ -27,7 +27,7 @@ function LoginFormPage() {
   return (
     <div className='login-wrapper'>
 
-      <h1 className="form-title">Log in or sign up</h1>
+      <h1 className="form-title">Log in</h1>
       <form onSubmit={handleSubmit}>
 
         <label>
