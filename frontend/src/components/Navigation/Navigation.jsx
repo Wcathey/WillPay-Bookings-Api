@@ -4,40 +4,46 @@ import ProfileButton from "./ProfileButton";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import './Navigation.css';
+import SignUpFormModal from "../SignUpFormModal/SignUpFormModal";
 
 function Navigation({ isLoaded }) {
     const sessionUser = useSelector(state => state.session.user);
-
-    const sessionLinks = sessionUser ? (
-        <ul>
+    let sessionLinks;
+    if (sessionUser) {
+        sessionLinks = (
             <li>
-            <ProfileButton user={sessionUser} />
+                <ProfileButton user={sessionUser} />
             </li>
-        </ul>
-
-    ) : (
-        <ul>
-            <li>
-                <OpenModalButton
-                buttonText="Log in"
-                modalComponent={<LoginFormModal/>}
-                />
-            </li>
-            <li>
-                <NavLink to="/signup">Sign up</NavLink>
-            </li>
-        </ul>
-    );
+        );
+    } else {
+        sessionLinks = (
+            <>
+                <li>
+                    <OpenModalButton
+                        buttonText="Log in"
+                        modalComponent={<LoginFormModal />
+                        }
+                    />
+                </li >
+                <li>
+                    <OpenModalButton
+                        buttonText="Sign up"
+                        modalComponent={<SignUpFormModal />}
+                    />
+                </li>
+            </>
+        );
+    }
 
     return (
-        <nav className="nav-bar">
+        <ul>
 
-
+            <li>
                 <NavLink to="/">Home</NavLink>
-
+            </li>
             {isLoaded && sessionLinks}
 
-        </nav>
+        </ul>
     );
 }
 

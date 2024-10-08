@@ -1,12 +1,11 @@
 import { useState } from "react";
 import * as sessionActions from '../../store/session';
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { useDispatch} from "react-redux";
+import {useModal} from '../../context/Modal';
 import './SignUpForm.css';
 
-function SignUpFormPage() {
+function SignUpFormModal() {
     const dispatch = useDispatch();
-    const sessionUser = useSelector((state) => state.session.user);
     const [username, setUsername] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -14,8 +13,7 @@ function SignUpFormPage() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
-
-    if (sessionUser) return <Navigate to="/" replace={true} />;
+    const {closeModal} = useModal();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,8 +25,9 @@ function SignUpFormPage() {
             lastName,
             email,
             password
-        })
-        ).catch(async (res) => {
+        }))
+        .then(closeModal)
+        .catch(async (res) => {
                 const data = await res.json();
                 if (data?.errors) {
                     setErrors(data.errors);
@@ -41,8 +40,8 @@ function SignUpFormPage() {
     };
 
     return (
-        <div className="sign-up-wrapper">
-            <h1 className="form-title">Sign up</h1>
+        <>
+            <h1>Sign up</h1>
             <form onSubmit={handleSubmit}>
 
                 <label>
@@ -110,11 +109,11 @@ function SignUpFormPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     />
-                    
+
                 <button type="submit">Create Account</button>
             </form>
-        </div>
+            </>
     )
 }
 
-export default SignUpFormPage;
+export default SignUpFormModal;
