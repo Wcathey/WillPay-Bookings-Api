@@ -1,7 +1,11 @@
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { RiMapPinUserFill } from "react-icons/ri";
 import * as sessionActions from '../../store/session';
+import OpenModalMenuItem from "./OpenModalMenuItem/";
+import LoginFormModal from "../LoginFormModal/LoginFormModal";
+import SignUpFormModal from "../SignUpFormModal/SignUpFormModal";
+
 
 const ProfileButton = ({ user }) => {
     const dispatch = useDispatch();
@@ -14,12 +18,12 @@ const ProfileButton = ({ user }) => {
     }
 
     useEffect(() => {
-        if(!showMenu) return;
+        if (!showMenu) return;
 
         const closeMenu = (e) => {
-           if (ulRef.current && !ulRef.current.contains(e.target)) {
-            setShowMenu(false);
-           }
+            if (!ulRef.current.contains(e.target)) {
+                setShowMenu(false);
+            }
         };
 
         document.addEventListener('click', closeMenu);
@@ -27,28 +31,55 @@ const ProfileButton = ({ user }) => {
         return () => document.removeEventListener('click', closeMenu)
     }, [showMenu]);
 
+    const closeMenu = () => setShowMenu(false);
+
     const logout = (e) => {
         e.preventDefault();
         dispatch(sessionActions.logout());
+        closeMenu();
     };
 
+    const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
     return (
         <>
             <button className="profile-button" onClick={toggleMenu}>
-                <div style={{ color: "black", fontSize: "50px" }}>
+                <div style={{ color: "white", fontSize: "50px"}}>
                     <RiMapPinUserFill />
                 </div>
             </button>
-            <div className={showMenu ? "profile-dropdown" : "hidden"} ref={ulRef}>
-            <ul >
-                <li>{user.username}</li>
-                <li>{user.firstName}</li>
-                <li>{user.email}</li>
+            <ul className={ulClassName} ref={ulRef}>
+                {user ? (
+                    <>
+                        <li>{user.username}</li>
+                        <li>{user.firstName}</li>
+                        <li>{user.email}</li>
+                        <li>
+                            <button className="logout-btn" onClick={logout}>Log Out</button>
+                        </li>
+                    </>
+                ) : (
+                    <>
+                        <li>
+                            <OpenModalMenuItem
+                                className="login-container"
+                                itemText="Log In"
+                                onItemClick={closeMenu}
+                                modalComponent={<LoginFormModal />}
+                            />
+                        </li>
+                        <li>
+                            <OpenModalMenuItem
+                                className="signup-container"
+                                itemText="Sign Up"
+                                onItemClick={closeMenu}
+                                modalComponent={<SignUpFormModal />}
+                            />
+                        </li>
+                    </>
+                )}
             </ul>
-            <button className="logout-btn" onClick={logout}>Log Out</button>
-            </div>
-            </>
+        </>
     );
 }
 
