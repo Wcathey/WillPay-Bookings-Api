@@ -25,6 +25,12 @@ function LoginFormModal() {
     )
   };
 
+  const demoUser = () => {
+    setCredential("Demo-lition");
+    setPassword("password");
+  }
+
+
   return (
     <div className='login-container'>
       <h1 className='login-label'>Log in</h1>
@@ -52,6 +58,11 @@ function LoginFormModal() {
 
         {errors.credential && <p>{errors.credential}</p>}
         <button type="submit">Continue</button>
+
+        <div  className="demo-login-btn">
+        <button onClick={demoUser} type="submit">Demo User</button>
+        </div>
+
       </form>
     </div>
 

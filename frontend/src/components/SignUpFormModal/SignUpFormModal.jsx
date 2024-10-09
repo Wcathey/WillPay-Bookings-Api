@@ -17,14 +17,19 @@ function SignUpFormModal() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(password === confirmPassword) {
         setErrors({});
+        if(confirmPassword !== password) {
+         setErrors({
+                confirmPassword: "Confirm Password field must be the same as the Password field"
+            });
+
+        }
         return dispatch(sessionActions.signUp({
             username,
             firstName,
             lastName,
             email,
-            password
+            password,
         }))
         .then(closeModal)
         .catch(async (res) => {
@@ -33,11 +38,18 @@ function SignUpFormModal() {
                     setErrors(data.errors);
                 }
             });
-    }
-        return setErrors({
-            confirmPassword: "Confirm Password field must be the same as the Password field"
-        });
+
+
     };
+
+    const demoSignUp = () => {
+        setUsername("demoSignUp")
+        setFirstName("demoName")
+        setLastName("demoLastName")
+        setEmail("demoSignUp@io.com")
+        setPassword("demopassword")
+        setConfirmPassword("demopassword")
+    }
 
     return (
         <div className="signup-container">
@@ -108,9 +120,15 @@ function SignUpFormModal() {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
-                    />
+                />
+
+                {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
 
                 <button type="submit">Create Account</button>
+
+                <div className="demo-signup-btn">
+                    <button onClick={demoSignUp} type="submit">Auto Fill Demo</button>
+                </div>
             </form>
             </div>
     )

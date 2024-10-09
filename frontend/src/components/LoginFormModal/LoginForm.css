@@ -14,6 +14,7 @@
 .login-container h1 {
     text-decoration: underline;
     cursor: default;
+    margin-bottom: 10px;
 }
 
  .login-container label {
@@ -51,3 +52,15 @@
 .login-container button:hover {
     background-color: rgb(212, 30, 30);
 }
+
+.demo-login-btn {
+    margin-top: 10px;
+}
+
+.login-container p {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+

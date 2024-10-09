@@ -15,6 +15,7 @@
 .signup-container h1 {
     text-decoration: underline;
     cursor: default;
+    margin-bottom: 10px;
 }
 
  .signup-container label {
@@ -51,4 +52,15 @@
 
 .signup-container button:hover {
     background-color: rgb(212, 30, 30);
+}
+
+.demo-signup-btn {
+    margin-top: 10px;
+}
+
+.signup-container p {
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 10px;
 }

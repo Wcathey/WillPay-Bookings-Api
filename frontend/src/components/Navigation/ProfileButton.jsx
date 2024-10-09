@@ -50,16 +50,16 @@ const ProfileButton = ({ user }) => {
             </button>
             <ul className={ulClassName} ref={ulRef}>
                 {user ? (
-                    <>
-                        <li>{user.username}</li>
-                        <li>{user.firstName}</li>
-                        <li>{user.email}</li>
+                    <div className="user-content">
+                        <li><p>Username:</p> {user.username}</li>
+                        <li><p>First Name:</p>{user.firstName}</li>
+                        <li><p>Email:</p> {user.email}</li>
                         <li>
                             <button className="logout-btn" onClick={logout}>Log Out</button>
                         </li>
-                    </>
+                        </div>
                 ) : (
-                    <>
+                    <div className="side-bar">
                         <li>
                             <OpenModalMenuItem
                                 className="login-container"
@@ -76,7 +76,7 @@ const ProfileButton = ({ user }) => {
                                 modalComponent={<SignUpFormModal />}
                             />
                         </li>
-                    </>
+                        </div>
                 )}
             </ul>
         </>
