@@ -1,16 +1,18 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { RiMapPinUserFill } from "react-icons/ri";
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from "./OpenModalMenuItem/";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignUpFormModal from "../SignUpFormModal/SignUpFormModal";
-
+import { Link } from "react-router-dom";
 
 const ProfileButton = ({ user }) => {
+
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
+
 
     const toggleMenu = (e) => {
         e.stopPropagation();
@@ -39,6 +41,8 @@ const ProfileButton = ({ user }) => {
         closeMenu();
     };
 
+
+
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
     return (
@@ -54,6 +58,9 @@ const ProfileButton = ({ user }) => {
                         <li><p>Username:</p> {user.username}</li>
                         <li><p>First Name:</p>{user.firstName}</li>
                         <li><p>Email:</p> {user.email}</li>
+                        <li className="manage-spots-link">
+                            <Link to='/spots/current'>Manage Spots</Link>
+                        </li>
                         <li>
                             <button className="logout-btn" onClick={logout}>Log Out</button>
                         </li>

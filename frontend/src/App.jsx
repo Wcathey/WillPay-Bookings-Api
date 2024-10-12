@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 import {createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
-
+import ManageSpots from './components/ManageSpots/ManageSpots';
+import CreateNewSpot from './components/CreateNewSpot/CreateNewSpot';
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -29,6 +30,16 @@ const router = createBrowserRouter([
       {
       path: '/',
       element: <h1 className="greeting">Welcome!</h1>
+      },
+      {
+        path: '/spots/current',
+        element:
+          <ManageSpots/>
+
+      },
+      {
+        path: '/spots/new',
+        element: <CreateNewSpot/>
       }
     ]
 
