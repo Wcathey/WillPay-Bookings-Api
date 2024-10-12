@@ -1,14 +1,14 @@
-import * as spotActions from '../../store/spot';
+import { getCurrentUserSpots } from '../../store/spot';
 import {useDispatch, useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 
 function ManageSpots () {
     const dispatch = useDispatch();
-    const currentUserSpots = useSelector(state => state.spot)
+    //const currentUserSpots = useSelector(state => state.spot.Spots);
     useEffect(() => {
-       console.log( dispatch(spotActions.getCurrentUserSpots()))
-    })
+        dispatch(getCurrentUserSpots())
+    }, [dispatch]);
 
     return (
         <div className="manage-spots-container">

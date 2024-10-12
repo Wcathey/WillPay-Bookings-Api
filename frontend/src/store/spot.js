@@ -58,17 +58,18 @@ export const createSpot = (spot) => async (dispatch) => {
 
 
 export const getAllSpots = () => async (dispatch) => {
-    const response = await csrfFetch("api/spots")
+    const response = await csrfFetch("/api/spots")
     const data = await response.json();
     dispatch(loadSpots(data.Spots));
     return data;
 }
 
 export const getCurrentUserSpots = () => async (dispatch) => {
-    const response = await csrfFetch('api/spots/current')
+    const response = await csrfFetch('/api/spots/current')
     console.log(response)
     const data = await response.json();
-    dispatch(loadCurrentUserSpots(data));
+    console.log(data)
+    dispatch(loadCurrentUserSpots(data.Spots));
     return response;
 }
 
