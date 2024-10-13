@@ -16,10 +16,15 @@ function ManageSpots () {
         if(currentUserSpots) {
         return (
             currentUserSpots.map((spot) => (
+
                 <>
                 <NavLink to={`/spots/${spot.id}`}>
                 <li key={spot.id}>
-                    {spot.name}
+                <img src={spot.previewImage}></img>
+                <p>Rating: {spot.rating ? spot.rating : "N/A"}</p>
+                <p>Price: {spot.price}</p>
+                <p>Location: {spot.address}, {spot.city}, {spot.state} </p>
+
                 </li>
                 </NavLink>
                 </>
