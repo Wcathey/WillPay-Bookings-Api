@@ -66,9 +66,7 @@ export const getAllSpots = () => async (dispatch) => {
 
 export const getCurrentUserSpots = () => async (dispatch) => {
     const response = await csrfFetch('/api/spots/current')
-    console.log(response)
     const data = await response.json();
-    console.log(data)
     dispatch(loadCurrentUserSpots(data.Spots));
     return response;
 }
@@ -87,7 +85,7 @@ const spotReducer = (state = initialState, action) => {
         }
 
         case LOAD_CURRENT_USER_SPOTS: {
-            const newState= {...state, ...action.spots}
+            const newState= {...state, Spots: action.spots}
             return newState;
         }
             default: return state;

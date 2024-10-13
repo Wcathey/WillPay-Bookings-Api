@@ -40,6 +40,16 @@ const router = createBrowserRouter([
       {
         path: '/spots/new',
         element: <CreateNewSpot/>
+      },
+      {
+        path: '/spots/:spotId',
+        element: <Outlet/>,
+        childre: [
+          {
+            index: true,
+            element: <></>
+          }
+        ]
       }
     ]
 
