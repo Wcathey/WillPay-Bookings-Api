@@ -5,6 +5,8 @@ import Navigation from './components/Navigation/Navigation';
 import * as sessionActions from './store/session';
 import ManageSpots from './components/ManageSpots/ManageSpots';
 import CreateNewSpot from './components/CreateNewSpot/CreateNewSpot';
+import SpotDetails from './components/SpotDetails/SpotDetails';
+
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -44,10 +46,10 @@ const router = createBrowserRouter([
       {
         path: '/spots/:spotId',
         element: <Outlet/>,
-        childre: [
+        children: [
           {
             index: true,
-            element: <></>
+            element: <SpotDetails/>
           }
         ]
       }

@@ -4,6 +4,7 @@ const ADD_SPOT = "spot/addSpot";
 const LOAD_SPOTS = "spot/loadSpots";
 const LOAD_CURRENT_USER_SPOTS = "spot/loadCurrentUserSpots";
 const ADD_IMAGE = "spot/addImage";
+const SPOT_DETAILS = "spot/spotDetails";
 
 const addSpot = (spot) => {
     return {
@@ -31,6 +32,13 @@ const addImage = (image) => {
     return {
         type: ADD_IMAGE,
         image
+    }
+}
+
+const spotDetails = (spotId) => {
+    return {
+        type: SPOT_DETAILS,
+        spotId
     }
 }
 
@@ -85,6 +93,13 @@ export const uploadSpotImage = (image) => async (dispatch) => {
 
 }
 
+export const getSpotById = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spots/${spotId}`)
+    const data = await response.json();
+    dispatch(spotDetails(data));
+    return response;
+}
+
 const initialState = {};
 
 const spotReducer = (state = initialState, action) => {
@@ -102,7 +117,11 @@ const spotReducer = (state = initialState, action) => {
             const newState= {...state, Spots: action.spots}
             return newState;
         }
-        
+        case SPOT_DETAILS: {
+            const newState = {...state, ...action.spotId}
+            return newState;
+        }
+
             default: return state;
     }
 
