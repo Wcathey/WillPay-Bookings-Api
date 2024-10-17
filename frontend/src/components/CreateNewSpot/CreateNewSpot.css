@@ -1,0 +1,42 @@
+.spot-form-container {
+    border: 2px solid black;
+    width: fit-content;
+    margin: 0 auto;
+    text-align: center;
+    height: fit-content;
+    padding: 20px;
+
+}
+
+.address-area,
+.lat-lng-area,
+.description-area,
+.spot-title-area,
+.price-area,
+.photos-area {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}
+
+.spot-form-container button {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 30%
+}
+
+.spot-form-container p {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.description-area input {
+    width: 80%;
+    height: 100px;
+    text-align: left
+}

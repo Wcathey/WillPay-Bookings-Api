@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createSpot, uploadSpotImage } from "../../store/spot";
 import {useNavigate} from 'react-router-dom';
-
+import './CreateNewSpot.css';
 function CreateNewSpot() {
     const dispatch = useDispatch();
     const navigate = useNavigate();

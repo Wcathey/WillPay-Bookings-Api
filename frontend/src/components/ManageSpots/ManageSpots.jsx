@@ -44,9 +44,7 @@ function ManageSpots () {
     return (
         <div className="manage-spots-container">
         <h1>Manage Spots</h1>
-        <h2>
-            <Link to="/spots/new">Create a new spot</Link>
-        </h2>
+      
         <div className='spot-list'>
         <SpotList/>
         </div>
