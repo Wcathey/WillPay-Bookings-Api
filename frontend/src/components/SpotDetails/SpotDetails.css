@@ -1,0 +1,74 @@
+.sd-callout-box {
+
+    border: 2px solid black;
+    border-radius: 20px;
+    text-align: center;
+    grid-template-columns: 3fr 3fr;
+    grid-template-rows: 1fr 1fr;
+    width: 300px;
+    padding: 15px;
+    background-color: white;
+}
+
+#callout-contents {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+
+
+}
+
+.reserve-btn {
+    width: 95%;
+    padding: 10px;
+    border: 3px solid black;
+    box-shadow: 2px 3px 5px 1px black;
+    background-color: rgb(235, 38, 38);
+    color: white;
+    font-size: 16px;
+
+}
+
+.lower-container {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.details-area {
+    width: 50%;
+}
+
+.spot-details-container li {
+    text-decoration: none;
+    list-style-type: none;
+
+}
+
+.spot-details-container {
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 100%;
+}
+
+.spot-details-container img {
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0px 0px 7px 0px;
+    margin-left: 1rem;
+
+}
+
+.sd-title {
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}

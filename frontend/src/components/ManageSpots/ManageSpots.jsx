@@ -21,7 +21,7 @@ function ManageSpots () {
                 <NavLink to={`/spots/${spot.id}`}>
                 <li key={spot.id}>
                 <img src={spot.previewImage}></img>
-                <p>Rating: {spot.rating ? spot.rating : "N/A"}</p>
+                <p>Rating: {spot.rating ? spot.rating : "New"}</p>
                 <p>Price: {spot.price}</p>
                 <p>Location: {spot.address}, {spot.city}, {spot.state} </p>
 
