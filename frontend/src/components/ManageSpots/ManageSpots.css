@@ -1,0 +1,18 @@
+
+.spot-list {
+    display: flex;
+    margin: 10px;
+    gap: 10px;
+}
+
+.spot-list img {
+    width: 500px;
+    height: 400px;
+    border: 2px solid grey;
+    border-radius: 10px;
+}
+
+.manage-spots-container {
+    color: white;
+    margin: 1rem;
+}

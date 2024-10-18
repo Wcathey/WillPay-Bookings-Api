@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useEffect } from 'react';
+import './ManageSpots.css'
 
 function ManageSpots () {
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ function ManageSpots () {
     return (
         <div className="manage-spots-container">
         <h1>Manage Spots</h1>
-      
+
         <div className='spot-list'>
         <SpotList/>
         </div>

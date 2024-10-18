@@ -49,7 +49,7 @@ function SpotDetails() {
 
                     <div className="lower-container">
                     <div className="details-area">
-                        <h3>Hosted by {owner[0].firstName} {owner[0].lastName}</h3>
+                        <h3>Hosted by: {owner[0].firstName} {owner[0].lastName}</h3>
                         <p>{spot.description}</p>
                         </div>
                     <div className="sd-callout-box">

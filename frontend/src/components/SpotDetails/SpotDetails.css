@@ -17,6 +17,7 @@
     background-color: white;
     font-size: 16px;
     font-weight: bold;
+    color: black;
 
 
 }
@@ -39,6 +40,16 @@
     margin-right: 1rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
+    color: white;
+    background-color: black;
+    border-top: 3px solid white;
+    padding-top: 10px;
+    font-size: 15px;
+}
+
+.lower-container h3 {
+    font-size: 18px;
+    margin-bottom: 5px;
 }
 
 .details-area {
@@ -57,12 +68,13 @@
     flex-direction: column;
     gap: 5px;
     width: 100%;
+    color: white;
 }
 
 .spot-details-container img {
-    border: 1px solid black;
+    border: 1px solid rgb(92, 87, 87);
     border-radius: 5px;
-    box-shadow: 0px 0px 7px 0px;
+    box-shadow: 0px 0px 7px 0px grey;
 
 
 }

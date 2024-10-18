@@ -21,9 +21,17 @@ function LandingPage() {
                 <li key={spot.id}>
                 <NavLink to={`/spots/${spot.id}`}>
                 <img src={spot.previewImage}></img>
+                <div className="lp-lower-details">
+
+
+                <div className="lp-area-price">
                 <p>{spot.city}, {spot.state}</p>
                 <p>${spot.price} night</p>
+                </div>
+                <div className="lp-rating">
                 <p><FaStar/> {spot.rating ? spot.rating : "New"}</p>
+                </div>
+                </div>
                 </NavLink>
                 </li>
                 </>
