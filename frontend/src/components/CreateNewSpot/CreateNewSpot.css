@@ -1,10 +1,12 @@
 .spot-form-container {
-    border: 2px solid black;
+    border: 3px solid rgba(0, 0, 0, 0.616);
     width: fit-content;
     margin: 0 auto;
     text-align: center;
     height: fit-content;
     padding: 20px;
+    border-radius: 10px;
+    background-color: whitesmoke;
 
 }
 
@@ -65,6 +67,10 @@
 
 .spot-form-container button:hover {
 
-   
+
     background-color: rgb(230, 46, 46);;
+}
+
+.spot-form-container input {
+    border: 2px solid black;
 }

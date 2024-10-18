@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { getAllSpots } from "../../store/spot";
 import { NavLink } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import './LandingPage.css';
 
 function LandingPage() {
     const dispatch = useDispatch();
