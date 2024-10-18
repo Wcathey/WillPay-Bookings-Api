@@ -25,13 +25,28 @@ function SpotDetails() {
                     <h2>{spot.name}</h2>
                     <p>{spot.city}, {spot.state}, {spot.country}</p>
                     </div>
+                    <div className="images-wrapper">
+
+                    <div className="preview-image-container">
+                        {images.map((image) => (
+                            image.preview &&
+                            <li key={image.id}>
+                                <img src={image.url}></img>
+                            </li>
+                        ))}
+                    </div>
                     <div className="sd-images-container">
                     {images.map((image) => (
+                        !image.preview &&
+
                         <li key={image.id}>
-                            <img src={image.url}></img>
+                            <img className="sd-image" src={image.url}></img>
                         </li>
+
                     ))}
                     </div>
+                    </div>
+
                     <div className="lower-container">
                     <div className="details-area">
                         <h3>Hosted by {owner[0].firstName} {owner[0].lastName}</h3>

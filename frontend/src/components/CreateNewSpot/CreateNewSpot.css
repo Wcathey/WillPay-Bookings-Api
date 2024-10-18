@@ -25,7 +25,9 @@
     font-weight: bold;
     border: 2px solid black;
     border-radius: 5px;
-    width: 30%
+    width: 30%;
+    background-color: red;
+    color: white;
 }
 
 .spot-form-container p {
@@ -39,4 +41,30 @@
     width: 80%;
     height: 100px;
     text-align: left
+}
+
+.spot-form-container label {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: oblique;
+    padding: 5px;
+}
+
+.address-area,
+.photos-area {
+    display: grid;
+}
+
+.photos-area input {
+    margin-top: 10px;
+}
+
+.spot-title-area input {
+    width: 40%;
+}
+
+.spot-form-container button:hover {
+
+   
+    background-color: rgb(230, 46, 46);;
 }
