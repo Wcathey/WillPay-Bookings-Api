@@ -1,0 +1,75 @@
+.update-spot-container {
+    border: 3px solid rgba(0, 0, 0, 0.616);
+    width: fit-content;
+    margin: 0 auto;
+    text-align: center;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: whitesmoke;
+
+}
+
+.address-area,
+.lat-lng-area,
+.description-area,
+.spot-title-area,
+.price-area,
+.photos-area {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
+}
+
+.update-spot-container button {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid black;
+    border-radius: 5px;
+    width: 30%;
+    background-color: red;
+    color: white;
+}
+
+.update-spot-container p {
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.description-area input {
+    width: 80%;
+    height: 100px;
+    text-align: left
+}
+
+.update-spot-container label {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: oblique;
+    padding: 5px;
+}
+
+.address-area,
+.photos-area {
+    display: grid;
+
+}
+
+.photos-area input {
+    margin-top: 10px;
+}
+
+
+
+.update-spot-container button:hover {
+
+
+    background-color: rgb(230, 46, 46);;
+}
+
+.update-spot-container input {
+    border: 2px solid black;
+}
