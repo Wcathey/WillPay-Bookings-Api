@@ -9,10 +9,11 @@ function UpdateSpotPage () {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const {spotId} = useParams();
+
     const currentSpot = useSelector(state => state.spot);
 
 
-    const [address, setAddress] = useState("");
+    const [address, setAddress] = useState(currentSpot.address);
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [country, setCountry] = useState("");
@@ -29,13 +30,35 @@ function UpdateSpotPage () {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
+        if(spotId) {
         dispatch(getSpotById(spotId))
+        }
     }, [dispatch, spotId])
+
+    useEffect(() => {
+        if(currentSpot) {
+            setAddress(currentSpot.address)
+            setCity(currentSpot.city)
+            setState(currentSpot.state)
+            setCountry(currentSpot.country)
+            setLat(currentSpot.lat)
+            setLng(currentSpot.lng)
+            setName(currentSpot.name)
+            setDescription(currentSpot.description)
+            setPrice(currentSpot.price)
+        }
+        if(currentSpot.SpotImages) {
+            const getPreviewImage = currentSpot.SpotImages.find((spot) => spot.preview === true)
+            setPreviewImage(getPreviewImage.url)
+
+        }
+    }, [currentSpot])
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors({});
-      
+
         const updatedSpot = {
             address,
             city,
@@ -47,11 +70,13 @@ function UpdateSpotPage () {
             description,
             price
         }
-        console.log(updatedSpot)
-        dispatch(updateSpotById(updatedSpot))
+
+        dispatch(updateSpotById(updatedSpot, spotId))
         .then(spot => {
-            if(previewImage)
+            const getPreviewImage = currentSpot.SpotImages.find((spot) => spot.preview === true)
+            if(previewImage && previewImage !== getPreviewImage.url) {
             dispatch(uploadSpotImage({spotId: spot.id, url: previewImage, preview: true}))
+            }
             return spot.id
         })
         .then((id) => {
@@ -88,7 +113,7 @@ function UpdateSpotPage () {
     };
 
 
-    if(currentSpot.SpotImages) {
+
     return (
        <div className="update-spot-container">
            <h1>Update Your Spot</h1>
@@ -105,7 +130,7 @@ function UpdateSpotPage () {
                 <input
                     placeholder={"country"}
                     type="text"
-                    defaultValue={currentSpot.country}
+                    defaultValue={country}
                     onChange={(e) => setCountry(e.target.value)}
                     required/>
                 {errors.country && <p>{errors.country}</p>}
@@ -115,7 +140,7 @@ function UpdateSpotPage () {
                 <input
                     placeholder="address"
                     type="text"
-                    defaultValue={currentSpot.address}
+                    defaultValue={address}
                     onChange={(e) => setAddress(e.target.value)}
                     required
                 />
@@ -127,7 +152,7 @@ function UpdateSpotPage () {
                 <input
                     placeholder="city"
                     type="text"
-                    defaultValue={currentSpot.city}
+                    defaultValue={city}
                     onChange={(e) => setCity(e.target.value)}
                     required
                 />
@@ -139,7 +164,7 @@ function UpdateSpotPage () {
                 <input
                 placeholder="state"
                 type="text"
-                defaultValue={currentSpot.state}
+                defaultValue={state}
                 onChange={(e) => setState(e.target.value)}
                 required
                 />
@@ -154,7 +179,7 @@ function UpdateSpotPage () {
             <input
                 placeholder="(optional)"
                 type="text"
-                defaultValue={currentSpot.lat}
+                defaultValue={lat}
                 onChange={(e) => setLat(e.target.value)}
                 />
             {errors.lat && <p>{errors.lat}</p>}
@@ -165,7 +190,7 @@ function UpdateSpotPage () {
             <input
                 placeholder="(optional)"
                 type="text"
-                defaultValue={currentSpot.lng}
+                defaultValue={lng}
                 onChange={(e) => setLng(e.target.value)}
                 />
             {errors.lng && <p>{errors.lng}</p>}
@@ -178,7 +203,7 @@ function UpdateSpotPage () {
             <input
                 placeholder="Please write at least 30 characters"
                 type="text"
-                defaultValue={currentSpot.description}
+                defaultValue={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
                 />
@@ -192,7 +217,7 @@ function UpdateSpotPage () {
             <input
                 placeholder="Name of your spot"
                 type="text"
-                defaultValue={currentSpot.name}
+                defaultValue={name}
                 onChange={(e) => setName(e.target.value)}
                 required
                 />
@@ -207,7 +232,7 @@ function UpdateSpotPage () {
             <span>$</span><input
                 placeholder="Price per night (USD)"
                 type="number"
-                defaultValue={currentSpot.price}
+                defaultValue={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
                 />
@@ -219,7 +244,7 @@ function UpdateSpotPage () {
             <input
                 placeholder="Preview Image URL"
                 type="text"
-                defaultValue={currentSpot.SpotImages[0].url}
+                defaultValue={previewImage}
                 onChange={(e) => setPreviewImage(e.target.value)}
                 required
                 />
@@ -256,14 +281,7 @@ function UpdateSpotPage () {
            </form>
        </div>
     )
-}
-else {
-    return (
-        <>
-        <p>Loading details</p>
-        </>
-    )
-}
+
 }
 
 export default UpdateSpotPage;

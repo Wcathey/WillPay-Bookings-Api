@@ -7,6 +7,7 @@ const ADD_IMAGE = "spot/addImage";
 const SPOT_DETAILS = "spot/spotDetails";
 const UPDATE_SPOT = "/spot/updateSpot";
 const DELETE_SPOT = "/spot/deleteSpot";
+const DELETE_IMAGE = "/spot/deleteImage";
 
 const addSpot = (spot) => {
     return {
@@ -36,6 +37,15 @@ const addImage = (image) => {
         image
     }
 }
+
+const deleteImage = (imageId) => {
+    return {
+        type: DELETE_IMAGE,
+        imageId
+    }
+}
+
+
 
 const spotDetails = (spotId) => {
     return {
@@ -106,7 +116,15 @@ export const uploadSpotImage = (image) => async (dispatch) => {
     const data = await response.json();
     dispatch(addImage(data));
     return response;
+}
 
+export const deleteSpotImage = (imageId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/spot-images/${imageId}`, {
+        method: "DELETE"
+    });
+    const data = await response.json();
+    dispatch(deleteImage(data));
+    return response;
 }
 
 export const getSpotById = (spotId) => async (dispatch) => {
