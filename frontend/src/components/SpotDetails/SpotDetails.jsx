@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from "react-redux"
 import { useEffect } from "react";
-import { getSpotById } from "../../store/spot"
+import { getSpotById, getReviewsBySpotId } from "../../store/spot"
 import { useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+
 import './SpotDetails.css';
 
 function SpotDetails() {
@@ -15,7 +16,6 @@ function SpotDetails() {
 
         dispatch(getSpotById(spotId))
     }, [dispatch, spotId])
-
 
     const ShowSpot = () => {
         if (images && owner) {
@@ -55,10 +55,18 @@ function SpotDetails() {
                     <div className="sd-callout-box">
                         <div id="callout-contents">
                             <p>${spot.price} night</p>
-                            <p><FaStar /> {spot.avgStarRating === 0 ? "New" : spot.avgStarRating} {spot.numReviews}</p>
+                            <p><FaStar /> {spot.avgStarRating === 0 ? "New" : spot.avgStarRating} {spot.numReviews} reviews</p>
                         </div>
                         <button className="reserve-btn">Reserve</button>
                     </div>
+                    </div>
+
+                    <div className="reviews-container">
+                        <div className="review-header">
+                        <FaStar/> {spot.avgStarRating === 0 ? "New" : spot.avgStarRating}
+                        <p>{spot.numReviews} reviews</p>
+                        </div>
+
                     </div>
 
                 </>

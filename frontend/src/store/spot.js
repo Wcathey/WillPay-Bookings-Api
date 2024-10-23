@@ -8,6 +8,9 @@ const SPOT_DETAILS = "spot/spotDetails";
 const UPDATE_SPOT = "/spot/updateSpot";
 const DELETE_SPOT = "/spot/deleteSpot";
 const DELETE_IMAGE = "/spot/deleteImage";
+const ADD_REVIEW = "spot/addReview";
+const LOAD_SPOT_REVIEWS = "spot/loadSpotReviews";
+
 
 const addSpot = (spot) => {
     return {
@@ -16,11 +19,24 @@ const addSpot = (spot) => {
     };
 };
 
+const addReview = (review) => {
+    return {
+        type: ADD_REVIEW,
+        review
+    }
+}
 
 const loadSpots = (spots) => {
     return {
         type: LOAD_SPOTS,
         spots
+    }
+}
+
+const loadSpotReviews = (spotId) => {
+    return {
+        type: LOAD_SPOT_REVIEWS,
+        spotId
     }
 }
 
@@ -97,7 +113,7 @@ export const getAllSpots = () => async (dispatch) => {
     const response = await csrfFetch("/api/spots")
     const data = await response.json();
     dispatch(loadSpots(data.Spots));
-    return response
+    return response;
 }
 
 export const getCurrentUserSpots = () => async (dispatch) => {
@@ -169,6 +185,24 @@ export const deleteSpotById =(spotId) => async (dispatch) => {
     return response;
 }
 
+export const createReview = (newReview, spotId) => async (dispatch) => {
+    const {review, stars} = newReview;
+    const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+        method: "POST",
+        body: JSON.stringify({review, stars})
+    });
+    const data = await response.json();
+    dispatch(addReview(data));
+    return data;
+}
+
+export const getReviewsBySpotId = (spotId) => async (dispatch) => {
+    const response = await csrfFetch(`api/spots/${spotId}/reviews`);
+    const data = await response.json();
+    dispatch(loadSpotReviews(data.Reviews));
+    return response;
+}
+
 const initialState = {};
 
 const spotReducer = (state = initialState, action) => {
@@ -198,8 +232,11 @@ const spotReducer = (state = initialState, action) => {
             const deletedSpot = action.spotId;
             const newState = {...state, deletedSpot};
             delete newState.deletedSpot;
-            return newState
-
+            return newState;
+        }
+        case LOAD_SPOT_REVIEWS: {
+            const newState = {...state, Reviews: action.spotId}
+            return newState;
         }
 
             default: return state;
