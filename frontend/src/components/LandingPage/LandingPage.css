@@ -23,3 +23,28 @@
     display: flex;
     justify-content: space-between;
 }
+
+.lp-image-wrap {
+    position: relative
+}
+
+.lp-tooltip {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    font-size: 3rem;
+    color: #fff;
+    background: rgba(0,0,0, 0.3);
+    visibility: none;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.lp-image-wrap:hover .lp-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 2s;
+
+}

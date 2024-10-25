@@ -20,7 +20,12 @@ function LandingPage() {
                 <>
                 <li key={spot.id}>
                 <NavLink to={`/spots/${spot.id}`}>
-                <img src={spot.previewImage}></img>
+
+                <div className="lp-image-wrap">
+                    <img id="lp-spot-image" src={spot.previewImage}></img>
+                    <div className="lp-tooltip">{spot.name}</div>
+                </div>
+
                 <div className="lp-lower-details">
 
 

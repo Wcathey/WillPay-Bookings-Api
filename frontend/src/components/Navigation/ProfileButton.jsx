@@ -5,6 +5,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from "./OpenModalMenuItem/";
 import LoginFormModal from "../LoginFormModal/LoginFormModal";
 import SignUpFormModal from "../SignUpFormModal/SignUpFormModal";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const ProfileButton = ({ user }) => {
@@ -12,7 +13,7 @@ const ProfileButton = ({ user }) => {
     const dispatch = useDispatch();
     const [showMenu, setShowMenu] = useState(false);
     const ulRef = useRef();
-
+    const navigate = useNavigate();
 
     const toggleMenu = (e) => {
         e.stopPropagation();
@@ -38,6 +39,7 @@ const ProfileButton = ({ user }) => {
     const logout = (e) => {
         e.preventDefault();
         dispatch(sessionActions.logout());
+        navigate('/');
         closeMenu();
     };
 
@@ -55,8 +57,8 @@ const ProfileButton = ({ user }) => {
             <ul className={ulClassName} ref={ulRef}>
                 {user ? (
                     <div className="user-content">
-                        <li><p>Username:</p> {user.username}</li>
-                        <li><p>First Name:</p>{user.firstName}</li>
+                        <li><p>Username:</p>{user.username}</li>
+                        <li><p>First Name:</p>Hello, {user.firstName}</li>
                         <li><p>Email:</p> {user.email}</li>
                         <li className="manage-spots-link">
                             <Link to='/spots/current'>Manage Spots</Link>

@@ -9,7 +9,7 @@ const UPDATE_SPOT = "/spot/updateSpot";
 const DELETE_SPOT = "/spot/deleteSpot";
 const DELETE_IMAGE = "/spot/deleteImage";
 const ADD_REVIEW = "spot/addReview";
-const LOAD_SPOT_REVIEWS = "spot/loadSpotReviews";
+
 
 
 const addSpot = (spot) => {
@@ -33,12 +33,7 @@ const loadSpots = (spots) => {
     }
 }
 
-const loadSpotReviews = (spotId) => {
-    return {
-        type: LOAD_SPOT_REVIEWS,
-        spotId
-    }
-}
+
 
 const loadCurrentUserSpots = (spots) => {
     return {
@@ -193,15 +188,11 @@ export const createReview = (newReview, spotId) => async (dispatch) => {
     });
     const data = await response.json();
     dispatch(addReview(data));
+
     return data;
 }
 
-export const getReviewsBySpotId = (spotId) => async (dispatch) => {
-    const response = await csrfFetch(`api/spots/${spotId}/reviews`);
-    const data = await response.json();
-    dispatch(loadSpotReviews(data.Reviews));
-    return response;
-}
+
 
 const initialState = {};
 
@@ -232,10 +223,6 @@ const spotReducer = (state = initialState, action) => {
             const deletedSpot = action.spotId;
             const newState = {...state, deletedSpot};
             delete newState.deletedSpot;
-            return newState;
-        }
-        case LOAD_SPOT_REVIEWS: {
-            const newState = {...state, Reviews: action.spotId}
             return newState;
         }
 

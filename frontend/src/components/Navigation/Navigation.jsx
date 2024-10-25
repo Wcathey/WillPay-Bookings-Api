@@ -9,7 +9,8 @@ function Navigation({ isLoaded }) {
     return (
         <ul className="nav-bar">
             <li>
-            <img className="logo-img" src="/Images/wp-logo.png"></img>
+            <NavLink to="/"><img className="logo-img" src="/Images/wp-logo.png"></img></NavLink>
+
                 <NavLink to="/">Home</NavLink>
 
             </li>
