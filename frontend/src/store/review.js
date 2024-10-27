@@ -42,14 +42,14 @@ const loadSpotReviews = (spotId) => {
     }
 }
 
-const getCurrentUserReviews = () => async (dispatch) => {
+export const getCurrentUserReviews = () => async (dispatch) => {
     const response = await csrfFetch('/api/reviews/current')
     const data = await response.json();
     dispatch(loadReviews(data.Reviews));
     return response;
 }
 
-const addReviewImage = (image, reviewId) => async (dispatch) => {
+export const addReviewImage = (image, reviewId) => async (dispatch) => {
     const {url} = image;
     const response = await csrfFetch(`/api/reviews/${reviewId}/images`, {
         method: "POST",
@@ -60,7 +60,7 @@ const addReviewImage = (image, reviewId) => async (dispatch) => {
     return response;
 }
 
-const updateReviewById = (newReview, reviewId) => async (dispatch) => {
+export const updateReviewById = (newReview, reviewId) => async (dispatch) => {
     const {review, stars} = newReview;
     const response = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
@@ -71,7 +71,7 @@ const updateReviewById = (newReview, reviewId) => async (dispatch) => {
     return data;
 }
 
-const deleteReviewById = (reviewId) => async (dispatch) => {
+export const deleteReviewById = (reviewId) => async (dispatch) => {
     const response = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "DELETE"
     });

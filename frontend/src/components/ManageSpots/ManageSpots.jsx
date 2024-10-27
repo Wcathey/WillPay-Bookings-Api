@@ -1,11 +1,12 @@
 import { getCurrentUserSpots } from '../../store/spot';
 import {useDispatch, useSelector} from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
 import './ManageSpots.css'
+
 
 function ManageSpots () {
     const dispatch = useDispatch();
@@ -70,9 +71,10 @@ function ManageSpots () {
     }
     else {
         return (
-            <>
-            <p>No spots currently listed</p>
-            </>
+
+                <p>Loading</p>
+
+
         )
     }
     }
@@ -81,7 +83,9 @@ function ManageSpots () {
     return (
         <div className="manage-spots-container">
         <h1>Manage Spots</h1>
-
+        <Link to="/spots/new">
+        <p id="create-spot-button">Create a New Spot</p>
+        </Link>
         <div className='spot-list'>
         <SpotList/>
         </div>

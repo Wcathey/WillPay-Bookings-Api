@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { createReview } from "../../store/spot";
+import { getReviewsBySpotId } from "../../store/review";
 import { useDispatch } from "react-redux";
 import { useModal } from '../../context/Modal';
+
 import './PostReview.css';
 
 function PostReviewModal({spotId}) {
@@ -10,7 +12,6 @@ function PostReviewModal({spotId}) {
     const [stars, setStars] = useState("5");
     const [errors, setErrors] = useState({});
     const { closeModal } = useModal();
-    
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -47,16 +48,17 @@ function PostReviewModal({spotId}) {
                 </label>
                 <select
                     onChange={(e) => setStars(e.target.value)}
+                    defaultValue={stars}
                     >
                     <option>1</option>
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
-                    <option selected>5</option>
+                    <option>5</option>
                 </select>
                 </div>
 
-                <button className="submit-review-btn" type="submit" onClick={handleSubmit}>Submit Review</button>
+                <button className="submit-review-btn" type="submit">Submit Review</button>
 
             </form>
         </div>

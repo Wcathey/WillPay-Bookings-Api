@@ -2,12 +2,13 @@ import { useSelector, useDispatch } from "react-redux"
 import { useEffect, useState } from "react";
 import { getSpotById } from "../../store/spot"
 import { getReviewsBySpotId } from "../../store/review";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import PostReviewModal from "../PostReviewModal/PostReviewModal";
+import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
 import './SpotDetails.css';
 
 dayjs.extend(relativeTime);
@@ -17,6 +18,7 @@ function SpotDetails() {
     const [showReview, setShowReview] = useState(false);
     const [postedDate, setPostedDate] = useState("");
     const [showPostReview, setShowPostReview] = useState(true);
+    const [showAlert, setShowAlert] = useState(false);
 
     const spot = useSelector(state => state.spot);
     const user = useSelector(state => state.session.user)
@@ -28,6 +30,9 @@ function SpotDetails() {
     const toggleReview = () => {
         setShowReview(!showReview);
     }
+    const toggleAlert = () => {
+        setShowAlert(!showAlert);
+    }
 
     useEffect(() => {
         dispatch(getSpotById(spotId))
@@ -35,40 +40,51 @@ function SpotDetails() {
 
 
         if (!showReview) return;
+        if(!showAlert) return;
+
         const closeReview = () => {
             setShowReview(false);
         };
+        const closeAlert = () => {
+                setShowAlert(false);
+
+        }
 
         document.addEventListener('click', closeReview);
-
-        return () => document.removeEventListener('click', closeReview)
-    }, [dispatch, spotId, showReview]);
+        document.addEventListener('click', closeAlert);
+        return () => {
+            document.removeEventListener('click', closeReview)
+            document.removeEventListener('click', closeAlert)
+        }
+    }, [dispatch, spotId, showReview, showAlert]);
 
     useEffect(() => {
         if (reviews) {
+            if(reviews.length) {
             const reviewDate = new Date(reviews[0].createdAt);
             const formatted = Intl.DateTimeFormat("en", {
                 year: "numeric",
                 month: "long",
             }).format(reviewDate);
         setPostedDate(formatted);
+            }
             if(user !== null) {
                 reviews.map((review) => {
                     if(review.userId === user.id) {
                         setShowPostReview(false)
                     }
                 })
-                if(owner[0].id === user.id) {
-                    setShowPostReview(false)
-                }
+
             }
 
         }
-    }, [reviews, user, owner])
+    }, [reviews, user])
 
     const ShowSpot = () => {
         if (images && owner) {
-
+            if(owner[0].id === user.id) {
+                setShowPostReview(false)
+            }
             return (
                 <>
                     <div className="sd-title">
@@ -107,7 +123,9 @@ function SpotDetails() {
                                 <p>${spot.price} night</p>
                                 <p><FaStar /> {spot.avgStarRating === 0 ? "New" : spot.avgStarRating} {spot.numReviews} reviews</p>
                             </div>
+                            <Link to={`/spots/${spotId}/bookings/new`}>
                             <button className="reserve-btn">Reserve</button>
+                            </Link>
                         </div>
                     </div>
 
@@ -141,6 +159,14 @@ function SpotDetails() {
                                 <h2>{review.User.userName}</h2>
                                 <p>{postedDate}</p>
                                 <p>{review.review}</p>
+                                {review.userId === user.id && (
+                                   <OpenModalButton
+                                   className="delete-review"
+                                   buttonText="Delete"
+                                   onButtonClick={toggleAlert}
+                                   modalComponent={<DeleteReviewModal reviewId={review.id}/>}
+                                   />
+                                ) }
                                 </li>
                             ))}
                             </>

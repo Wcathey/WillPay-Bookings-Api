@@ -16,3 +16,19 @@
     color: white;
     margin: 1rem;
 }
+
+#create-spot-button {
+    border: 3px solid rgba(175, 36, 36, 0.733);
+    width: fit-content;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 10px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    background-color: rgb(46, 45, 45);
+    color: white;
+}
+
+#create-spot-button:hover {
+    color: rgb(247, 19, 19);
+}

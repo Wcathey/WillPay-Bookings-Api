@@ -8,6 +8,7 @@ import CreateNewSpot from './components/CreateNewSpot/CreateNewSpot';
 import SpotDetails from './components/SpotDetails/SpotDetails';
 import LandingPage from './components/LandingPage/LandingPage';
 import UpdateSpotPage from './components/UpdateSpotPage/UpdateSpotPage';
+import CreateNewBooking from './components/CreeateNewBooking/CreateNewBooking';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: 'spots/:spotId/edit',
         element: <UpdateSpotPage/>
+      },
+      {
+        path: '/spots/:spotId/bookings/new',
+        element: <CreateNewBooking/>
       }
     ]
 

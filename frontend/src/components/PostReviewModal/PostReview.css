@@ -68,3 +68,11 @@
 .submit-review-btn:hover {
     background-color: rgb(145, 22, 22);
 }
+
+.unselected-star {
+    color: white;
+}
+
+.selected-star {
+    color: yellow;
+}

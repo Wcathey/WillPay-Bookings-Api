@@ -17,7 +17,7 @@ function LandingPage() {
         if(allSpots) {
             return (
                 allSpots.map((spot) => (
-                <>
+
                 <li key={spot.id}>
                 <NavLink to={`/spots/${spot.id}`}>
 
@@ -34,12 +34,12 @@ function LandingPage() {
                 <p>${spot.price} night</p>
                 </div>
                 <div className="lp-rating">
-                <p><FaStar/> {spot.rating ? spot.rating : "New"}</p>
+                <p><FaStar/> {spot.avgRating ? spot.avgRating : "New"}</p>
                 </div>
                 </div>
                 </NavLink>
                 </li>
-                </>
+                
                 ))
 
             )
