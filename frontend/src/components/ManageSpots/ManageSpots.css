@@ -1,13 +1,18 @@
 
 .spot-list {
-    display: flex;
-    margin: 10px;
-    gap: 10px;
+    width: 90%;
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    gap: 3rem;
+    align-items: center;
+    margin-top: 5rem;
+
 }
 
 .spot-list img {
-    width: 500px;
-    height: 400px;
+    width: 100%;
+    height: 300px;
     border: 2px solid grey;
     border-radius: 10px;
 }
@@ -16,19 +21,22 @@
     color: white;
     margin: 1rem;
 }
-
-#create-spot-button {
-    border: 3px solid rgba(175, 36, 36, 0.733);
-    width: fit-content;
-    padding-left: 3px;
-    padding-right: 3px;
-    border-radius: 10px;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    background-color: rgb(46, 45, 45);
-    color: white;
+#create-spot-btn {
+    margin-left: 1rem;
+    margin-bottom: 4rem;
 }
 
 #create-spot-button:hover {
     color: rgb(247, 19, 19);
+}
+
+.manage-spots-container h1 {
+    margin-left: 1rem;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
+}
+
+.edit-buttons {
+    display: flex;
+    gap: 10px;
 }

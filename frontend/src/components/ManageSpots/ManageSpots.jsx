@@ -52,7 +52,7 @@ function ManageSpots () {
                 </li>
                 </NavLink>
                 <div className="edit-buttons">
-                        <button onClick={(e) => {
+                        <button className="button-options"onClick={(e) => {
                             e.preventDefault();
                             navigate(`/spots/${spot.id}/edit`)
                         }}>
@@ -84,7 +84,7 @@ function ManageSpots () {
         <div className="manage-spots-container">
         <h1>Manage Spots</h1>
         <Link to="/spots/new">
-        <p id="create-spot-button">Create a New Spot</p>
+        <p className='button-options' id="create-spot-btn">Create a New Spot</p>
         </Link>
         <div className='spot-list'>
         <SpotList/>
