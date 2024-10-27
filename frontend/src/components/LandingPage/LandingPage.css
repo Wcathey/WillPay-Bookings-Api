@@ -1,27 +1,42 @@
 .landing-page-container li {
+    width: 90%;
     text-decoration: none;
     list-style-type: none;
     color: black;
+
+
+
+
 }
 
 .landing-page-container {
-    display: flex;
-    gap: 2rem;
-    margin-top: 4rem;
-    margin-left: 5rem;
+    width: 90%;
+    min-width: 600px;
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    gap: 3rem;
+    align-items: center;
+    margin-top: 5rem;
+
+
+
+
 
 }
 
 .landing-page-container img {
-    width: 500px;
-    height: 400px;
+    width: 90%;
+    height: 300px;
+    min-width: 200px;
     border-radius: 10px;
     box-shadow: 2px 2px 10px 2px;
+
 }
 
 .lp-lower-details {
     display: flex;
     justify-content: space-between;
+    width: 90%;
 }
 
 .lp-image-wrap {
@@ -32,7 +47,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: fit-content;
     padding: 10px;
     font-size: 3rem;
     color: #fff;
@@ -47,4 +62,9 @@
     opacity: 1;
     transition: opacity 2s;
 
+}
+
+.main-lp {
+    display: flex;
+    justify-content: center;
 }

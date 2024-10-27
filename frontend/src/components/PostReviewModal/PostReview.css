@@ -1,6 +1,7 @@
 .review-input-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     width: 500px;
     height: 400px;
     padding-top: 10px;
@@ -9,6 +10,8 @@
     background-color: rgb(44, 47, 49);
     color: white;
     border: 4px solid rgb(219, 212, 212);
+   
+
 
 
 }

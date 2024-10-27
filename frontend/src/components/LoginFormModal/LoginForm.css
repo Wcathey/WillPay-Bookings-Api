@@ -1,5 +1,6 @@
 .login-container {
     width: 500px;
+    min-width: 500px;
     text-align: center;
     padding: 20px;
 }
@@ -63,4 +64,3 @@
     font-style: italic;
     margin-bottom: 10px;
 }
-

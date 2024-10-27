@@ -132,23 +132,31 @@ function SpotDetails() {
 
                         <div className="review-header">
                             <FaStar /> {spot.avgStarRating === 0 ? "New" : spot.avgStarRating}
-                            <p id="review-dot">.</p>
-                            <p>{spot.numReviews} reviews</p>
+                            {spot.numReviews > 0 &&
+                            <div className="review-count-area">
+                             <p id="review-dot">.</p>
+                             {spot.numReviews === 1 ?
+                            <p>{spot.numReviews} Review</p>
+                             : <p>{spot.numReviews} Reviews</p>}
+                            </div>
+           }
                         </div>
 
                         {showPostReview && user &&(
+                            <div className="post-review-modal">
                             <OpenModalButton
                                 className="post-review-btn"
                                 buttonText="Post a Review"
                                 onButtonClick={toggleReview}
                                 modalComponent={<PostReviewModal spotId={spot.id} />}
                             />
+                            </div>
                         )
                         }
                     </div>
                     <div className="spot-reviews">
                         {spot.numReviews === 0 &&  (
-                            <p>Be the first to post a review</p>
+                            <p id="no-reviews">Be the first to post a review</p>
                         )
                         }
                         {reviews && (

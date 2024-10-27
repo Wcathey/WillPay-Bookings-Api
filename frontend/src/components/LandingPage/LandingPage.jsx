@@ -39,7 +39,7 @@ function LandingPage() {
                 </div>
                 </NavLink>
                 </li>
-                
+
                 ))
 
             )
@@ -54,8 +54,10 @@ function LandingPage() {
     }
 
     return (
+        <div className="main-lp">
         <div className="landing-page-container">
             <SpotTileList/>
+        </div>
         </div>
     )
 

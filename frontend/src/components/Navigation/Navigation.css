@@ -7,6 +7,8 @@
     box-shadow: 0px 0px 3px 0px;
     margin-bottom: 1rem;
     background-color: rgb(19, 17, 17);
+    width: 100%;
+    min-width: 600px;
 
 
 }
@@ -47,6 +49,7 @@ a {
     height: 50%;
     background-color: rgb(180, 3, 3);
     color: white;
+    z-index: 1;
 
 
 }
@@ -65,6 +68,7 @@ a {
     cursor: pointer;
     box-shadow: 0px 0px 3px 0px black;
     margin-bottom: 1rem;
+    margin-right: 1rem;
 }
 
 .profile-button:hover {

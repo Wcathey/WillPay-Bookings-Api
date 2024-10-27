@@ -167,7 +167,7 @@ function CreateNewSpot() {
              <p>Mention the best features of your space any special amentities like fast wifi or parking and what you love
                 about the neighborhood
              </p>
-            <input
+            <textarea
                 placeholder="Please write at least 30 characters"
                 type="text"
                 value={description}

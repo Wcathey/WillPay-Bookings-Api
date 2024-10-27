@@ -72,7 +72,7 @@ router.get('/current', requireAuth,  async (req, res, next) => {
 });
     const addImage = await addPreviewImage(ownedSpots, SpotImage);
     const addReviewAvg = await getReviewAvg(addImage, Review)
-    res.json(addReviewAvg)
+    res.json({"Spots": addReviewAvg})
 
 
 
@@ -123,17 +123,17 @@ router.get('/:spotId/reviews', async (req, res, next) => {
         res.json({message: "Spot couldnt be found"})
     }
     else {
-    const reviews = await Review.findAll({
+    const Reviews = await Review.findAll({
         include: [{
             model: User,
-            attributes: ["id", "firstName", "lastName"],
+            attributes: ["id", "firstName", "lastName", "userName"],
 
         }, ReviewImage],
          where: {
             spotId: req.params.spotId
         }
     });
-        res.json(reviews)
+        res.json({Reviews})
 }
 
 });

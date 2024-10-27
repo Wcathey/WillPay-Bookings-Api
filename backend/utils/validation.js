@@ -62,20 +62,17 @@ const validateSpot = [
     .exists({checkFalsy: true})
     .withMessage("Country is required"),
   check('lat')
-    .exists({checkFalsy: true})
-    .isFloat({min: -90, max: 90})
-    .withMessage("Latitude must be within -90 and 90"),
+    .optional(),
   check('lng')
-    .exists({checkFalsy: true})
-    .isFloat({min: -180, max: 180})
-    .withMessage("Longitude must be within -180 and 180"),
+    .optional(),
   check('name')
     .exists({checkFalsy: true})
     .isLength({max: 50})
     .withMessage("Name must be less than 50 characters"),
   check('description')
     .exists({checkFalsy: true})
-    .withMessage("Description is required"),
+    .isLength({min: 30})
+    .withMessage("Description Must be at least 30 characters"),
   check('price')
     .exists({checkFalsy: true})
     .isFloat({min: 0})
@@ -84,9 +81,10 @@ const validateSpot = [
 ]
 
 const validateReview = [
-  check("review")
+    check("review")
     .exists({checkFalsy: true})
-    .withMessage("Review text is required"),
+    .isLength({min: 10})
+    .withMessage("Review must be at least 10 characters"),
   check("stars")
     .exists({checkFalsy: true})
     .isFloat({min: 1, max: 5})

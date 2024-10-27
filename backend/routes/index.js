@@ -12,7 +12,11 @@ const { User } = require('../db/models');
 // Add a XSRF-TOKEN cookie
 if (process.env.NODE_ENV !== 'production') {
   router.get('/api/csrf/restore', (req, res) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
+    const csrfToken = req.csrfToken();
+    res.cookie('XSRF-TOKEN', csrfToken);
+    res.status(200).json({
+      'XSRF-Token': csrfToken
+    })
     return res.json({});
   });
 }

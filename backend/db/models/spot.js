@@ -52,20 +52,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.FLOAT,
-      allowNull: false,
       validate: {
-        min: -90,
-        max: 90
+       customLat(value) {
+        if(value < -90 || value > 90) {
+          throw Error("Latitude must be within -90 ad 90")
+        }
+       }
       }
     },
     lng: {
       type: DataTypes.FLOAT,
-      allowNull: false,
       validate: {
-        min: -180,
-        max: 180
+      customLng(value) {
+        if(value < -180 || value > 180) {
+          throw Error ("Longitude must be within -180 and 180")
       }
+    }
     },
+  },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -75,7 +79,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        lengthCheck() {
+          if(!this.description.length >= 30) {
+            throw Error
+          }
+        }
+      }
     },
     price: {
       type: DataTypes.FLOAT,

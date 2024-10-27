@@ -49,11 +49,10 @@ image1: https://i.pinimg.com/originals/16/6c/c6/166cc650366bb4c1392668585b827fed
 
 image2: https://topdreamer.com/wp-content/uploads/2015/06/architecture-elegant-master-bedroom-with-large-round-chandelier-also-unique-with-white-carpet-and-cream-floor-and-a-chandelier-diy-unique-flooring-ideas-design-bungalow-floor-plans-india-mansion.jpg
 
-image2: https://i.pinimg.com/originals/d0/a8/cc/d0a8cc18c7626fac8051de9269a47232.jpg
+image3: https://i.pinimg.com/originals/d0/a8/cc/d0a8cc18c7626fac8051de9269a47232.jpg
 
-image3: https://i.pinimg.com/originals/2b/48/13/2b4813ef4a8af6a042711e1cf73ff680.jpg
+image4: https://i.pinimg.com/originals/2b/48/13/2b4813ef4a8af6a042711e1cf73ff680.jpg
 
-image4: https://topdreamer.com/wp-content/uploads/2015/03/luxury-real-estate-fastlane-mag001.jpg
 
 Spot 3: Barn-On-Wheels
 

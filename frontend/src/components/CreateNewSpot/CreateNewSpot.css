@@ -1,13 +1,20 @@
 .spot-form-container {
+    display: grid;
     border: 3px solid rgba(0, 0, 0, 0.616);
-    width: fit-content;
+    width: 900px;
+    min-width: 600px;
     margin: 0 auto;
     text-align: center;
     height: fit-content;
-    padding: 20px;
+
     border-radius: 10px;
     background-color: whitesmoke;
 
+}
+
+.address-area input {
+    width:90%;
+    margin: 0 auto;
 }
 
 .address-area,
@@ -39,17 +46,18 @@
     margin-bottom: 10px;
 }
 
-.description-area input {
+.description-area textarea {
     width: 80%;
     height: 100px;
-    text-align: left
+    text-align: left;
+    margin: 0 auto;
+    border: 2px solid black;
 }
 
 .spot-form-container label {
     font-size: 14px;
     font-weight: bold;
     font-style: oblique;
-    padding: 5px;
 }
 
 .address-area,
@@ -58,7 +66,8 @@
 }
 
 .photos-area input {
-    margin-top: 10px;
+    margin: 0 auto;
+    width: 90%;
 }
 
 .spot-title-area input {

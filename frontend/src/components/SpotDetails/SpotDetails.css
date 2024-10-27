@@ -67,9 +67,11 @@
 
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    width: 100%;
+    gap: 10px;
+    width: 95%;
+    min-width: 600px;
     color: white;
+    margin: 0 auto;
 }
 
 .spot-details-container img {
@@ -135,12 +137,13 @@
 
 .review-header {
     display: flex;
+    justify-content: flex-start;
     gap: 10px;
     align-items: center;
-    font-size: 18px;;
+    font-size: 18px;
 }
 
-.post-review-btn {
+.button-options {
     width: fit-content;
     padding: 4px;
     font-size: 16px;
@@ -184,4 +187,29 @@
     margin-bottom: 1rem;
     font-style: italic;
     font-weight: bold;
+}
+
+#no-reviews {
+    margin: 1rem;
+}
+
+.review-count-area {
+    display: flex;
+    width: fit-content;
+    gap: 1rem;
+
+
+}
+
+#review-dot {
+
+
+
+
+}
+
+#review-number {
+    display: flex;
+    align-items: center;
+    width: 100%
 }
