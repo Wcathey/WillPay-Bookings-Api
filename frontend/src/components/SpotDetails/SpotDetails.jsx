@@ -59,6 +59,9 @@ function SpotDetails() {
     }, [dispatch, spotId, showReview, showAlert]);
 
     useEffect(() => {
+        if(user === null) {
+            setShowPostReview(false);
+        }
         if (reviews) {
             if(reviews.length) {
             const reviewDate = new Date(reviews[0].createdAt);
@@ -80,13 +83,9 @@ function SpotDetails() {
         }
     }, [reviews, user])
 
-    const ShowSpot = () => {
-        if (images && owner) {
-            if(owner[0].id === user.id) {
-                setShowPostReview(false)
-            }
+           if(images && owner) {
             return (
-                <>
+                <div className="spot-details-container">
                     <div className="sd-title">
                         <h2>{spot.name}</h2>
                         <p>{spot.city}, {spot.state}, {spot.country}</p>
@@ -175,9 +174,10 @@ function SpotDetails() {
 
                         )}
                     </div>
-                </>
+                    </div>
             )
         }
+
         else {
             return (
                 <>
@@ -185,13 +185,9 @@ function SpotDetails() {
                 </>
             )
         }
-    }
 
-    return (
-        <div className="spot-details-container">
-            <ShowSpot />
-        </div>
-    )
+
+
 
 
 }
