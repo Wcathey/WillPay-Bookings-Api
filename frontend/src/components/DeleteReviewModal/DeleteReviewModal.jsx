@@ -1,12 +1,10 @@
 import { useDispatch} from "react-redux";
-import {deleteReviewById, getReviewsBySpotId} from "../../store/review"
+import {deleteReviewById} from "../../store/review"
 import { useModal } from "../../context/Modal";
-import { useParams } from "react-router-dom";
 
 function DeleteReviewModal ({reviewId}) {
     const dispatch = useDispatch();
     const {closeModal} = useModal();
-    const {spotId} = useParams();
 
     const confirmedDelete = (e) => {
         e.preventDefault();

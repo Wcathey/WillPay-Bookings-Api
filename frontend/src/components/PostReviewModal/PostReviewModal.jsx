@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createReview } from "../../store/spot";
-import { getReviewsBySpotId } from "../../store/review";
 import { useDispatch } from "react-redux";
 import { useModal } from '../../context/Modal';
 
