@@ -1,5 +1,5 @@
 import { getCurrentUserSpots } from '../../store/spot';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import DeleteSpotModal from '../DeleteSpotModal/DeleteSpotModal';
 import './ManageSpots.css'
 
 
-function ManageSpots () {
+function ManageSpots() {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const btnRef = useRef();
@@ -22,9 +22,9 @@ function ManageSpots () {
     useEffect(() => {
         dispatch(getCurrentUserSpots())
 
-        if(!showAlert) return;
+        if (!showAlert) return;
         const closeAlert = (e) => {
-            if(!btnRef.current.contains(e.target)) {
+            if (!btnRef.current.contains(e.target)) {
                 setShowAlert(false);
             }
         }
@@ -38,57 +38,59 @@ function ManageSpots () {
     const deleteClassName = "delete-btn-wrapper" + (showAlert ? "" : " hidden");
 
     const SpotList = () => {
-        if(currentUserSpots) {
-        return (
-            currentUserSpots.map((spot) => (
+        if (currentUserSpots) {
+            return (
+                currentUserSpots.map((spot) => (
 
-                <div className="spot-wrapper" key={spot.id}>
-                <NavLink to={`/spots/${spot.id}`}>
-                <li key={spot.id}>
-                <img src={spot.previewImage}></img>
-                <p>Rating: {spot.rating ? spot.rating : "New"}</p>
-                <p>Price: {spot.price}</p>
-                <p>Location: {spot.address}, {spot.city}, {spot.state} </p>
-                </li>
-                </NavLink>
-                <div className="edit-buttons">
-                        <button className="button-options"onClick={(e) => {
-                            e.preventDefault();
-                            navigate(`/spots/${spot.id}/edit`)
-                        }}>
-                            Update</button>
-                        <div className={deleteClassName} ref={btnRef}></div>
-                        <OpenModalButton
-                            className="delete-button"
-                            buttonText="Delete"
-                            onButtonClick={toggleAlert}
-                            modalComponent={<DeleteSpotModal spotId={spot.id}/>}
+                    <div className="spot-wrapper" key={spot.id}>
+                        <NavLink to={`/spots/${spot.id}`}>
+                            <li key={spot.id}>
+                                <img src={spot.previewImage}></img>
+                                <p>Rating: {spot.rating ? spot.rating : "New"}</p>
+                                <p>Price: {spot.price}</p>
+                                <p>Location: {spot.address}, {spot.city}, {spot.state} </p>
+                            </li>
+                        </NavLink>
+                        <div className="edit-buttons">
+                            <button className="button-options" onClick={(e) => {
+                                e.preventDefault();
+                                navigate(`/spots/${spot.id}/edit`)
+                            }}>
+                                Update</button>
+                            <div className={deleteClassName} ref={btnRef}></div>
+                            <OpenModalButton
+                                className="delete-button"
+                                buttonText="Delete"
+                                onButtonClick={toggleAlert}
+                                modalComponent={<DeleteSpotModal spotId={spot.id} />}
                             />
-                </div>
-                </div>
-            ))
-        )
-    }
-    else {
-        return (
+                        </div>
+                    </div>
+                ))
+            )
+        }
+        else {
+            return (
 
                 <p>Loading</p>
 
 
-        )
-    }
+            )
+        }
     }
 
 
     return (
         <div className="manage-spots-container">
-        <h1>Manage Spots</h1>
-        <Link to="/spots/new">
-        <p className='button-options' id="create-spot-btn">Create a New Spot</p>
-        </Link>
-        <div className='spot-list'>
-        <SpotList/>
-        </div>
+            <div className='ms-title-area'>
+                <h1>Manage Spots</h1>
+                <Link to="/spots/new">
+                    <p className='button-options' id="create-spot-btn">Create a New Spot</p>
+                </Link>
+            </div>
+            <div className='spot-list'>
+                <SpotList />
+            </div>
         </div>
     )
 }

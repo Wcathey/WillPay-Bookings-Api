@@ -4,11 +4,10 @@
     justify-content: space-between;
     padding: 10px;
     border-bottom: 2px solid rgb(155, 26, 26);
-    box-shadow: 0px 0px 3px 0px;
     margin-bottom: 1rem;
     background-color: rgb(19, 17, 17);
     width: 100%;
-    min-width: 600px;
+
 
 
 }
@@ -52,6 +51,7 @@ a {
     z-index: 1;
 
 
+
 }
 
 .hidden {
@@ -69,6 +69,7 @@ a {
     box-shadow: 0px 0px 3px 0px black;
     margin-bottom: 1rem;
     margin-right: 1rem;
+    transition-duration: .5s;
 }
 
 .profile-button:hover {
@@ -82,7 +83,7 @@ a {
     font-weight: bolder;
     border-radius: 5px;
     background-color: rgb(0, 0, 0);
-    width: 60%;
+    width: 100%;
     cursor: pointer;
     color: white;
     border: 1px solid white;
@@ -100,18 +101,22 @@ a {
 color: rgb(0, 0, 0);
 margin-bottom: 5px;
 font-style: italic;
+text-decoration: underline;
 
 }
 
 .user-content li {
 margin-bottom: 5px;
 
+
 }
 
 .user-content {
     display: flex;
     flex-direction: column;
+    width: 100%;
     cursor: default;
+
 }
 
 .nav-buttons {
@@ -137,6 +142,7 @@ margin-bottom: 5px;
     color:white;
     font-size: 14px;
     padding: 4px;
+    text-align: center;
 
 }
 
@@ -144,4 +150,85 @@ margin-bottom: 5px;
     background-color: white;
     color: black;
     border: 2px solid black;
+}
+
+.manage-spots-link {
+    display: grid;
+    gap: 5px;
+    justify-content: start;
+    position: absolute;
+    bottom: 0
+
+}
+
+@media screen and (max-width: 800px) {
+    .nav-bar {
+        width: 100%;
+        min-width: 650px;
+
+    }
+
+    .profile-dropdown {
+        top: 11rem;
+        width: 100%;
+        min-width: 650px;
+        height: 30px;
+        left: 0;
+        right: 0;
+        display: flex;
+        border-radius: 0px;
+        background-color: black;
+        border:0px;
+        z-index: 1;
+        transition: all .3s ease-in-out;
+
+    }
+
+    .user-content {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+
+    }
+
+    .user-content li {
+        text-align: center;
+        color: white;
+        margin-right: 1rem;
+        margin-left: 1rem;
+        font-size: 16px;
+
+    }
+
+    .user-content p {
+        color: rgb(250, 6, 6);
+    }
+
+    .manage-spots-link {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.2);
+
+
+
+
+    }
+
+    .manage-spots-link a,
+    .manage-spots-link button {
+        font-size: 10px;
+        width: 100px;
+        margin-right: .5rem;
+        margin-left: .5rem;
+    }
+
+
+    .hidden {
+        display: none;
+    }
 }

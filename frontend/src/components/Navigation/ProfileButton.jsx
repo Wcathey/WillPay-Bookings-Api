@@ -62,8 +62,7 @@ const ProfileButton = ({ user }) => {
                         <li><p>Email:</p> {user.email}</li>
                         <li className="manage-spots-link">
                             <Link to='/spots/current'>Manage Spots</Link>
-                        </li>
-                        <li>
+
                             <button className="logout-btn" onClick={logout}>Log Out</button>
                         </li>
                         </div>
