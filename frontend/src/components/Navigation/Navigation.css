@@ -2,11 +2,11 @@
 .nav-bar {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
+
     border-bottom: 2px solid rgb(155, 26, 26);
     margin-bottom: 1rem;
     background-color: rgb(19, 17, 17);
-    width: 100%;
+
 
 
 
@@ -163,15 +163,18 @@ margin-bottom: 5px;
 
 @media screen and (max-width: 800px) {
     .nav-bar {
-        width: 100%;
+        width: stretch;
         min-width: 650px;
 
     }
 
+    .menu-options {
+        font-size: 16px;
+    }
     .profile-dropdown {
         top: 11rem;
-        width: 100%;
-        min-width: 650px;
+        width: stretch;
+        min-width: 620px;
         height: 30px;
         left: 0;
         right: 0;
