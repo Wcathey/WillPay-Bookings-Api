@@ -8,13 +8,16 @@ async function addPreviewImage(spots, imageModel) {
     for (let i = 0; i < spots.length; i++) {
 
         let spot = spots[i].toJSON();
-        const spotImage = await imageModel.findByPk(spot.id, {
+        const spotImage = await imageModel.findOne( {
             attributes: ['url'],
             where: {
-                preview: true
+                preview: true,
+                spotId: spot.id
+
             }
         });
         if (spotImage) {
+            console.log(spotImage)
             spot["previewImage"] = spotImage.dataValues.url
 
         }
