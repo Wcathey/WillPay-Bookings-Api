@@ -7,7 +7,16 @@ const apiRouter = require('./api');
 const { setTokenCookie, restoreUser, requireAuth } = require('../utils/auth.js');
 const { User } = require('../db/models');
 
-
+if (process.env.NODE_ENV !== 'production') {
+  router.get('/api/csrf/restore', (req, res) => {
+    const csrfToken = req.csrfToken();
+    res.cookie('XSRF-TOKEN', csrfToken);
+    res.status(200).json({
+      'XSRF-Token': csrfToken
+    })
+    return res.json({});
+  });
+}
 
 
 router.use('/api', apiRouter);
@@ -36,16 +45,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Add a XSRF-TOKEN cookie
-if (process.env.NODE_ENV !== 'production') {
-  router.get('/api/csrf/restore', (req, res) => {
-    const csrfToken = req.csrfToken();
-    res.cookie('XSRF-TOKEN', csrfToken);
-    res.status(200).json({
-      'XSRF-Token': csrfToken
-    })
-    return res.json({});
-  });
-}
+
   // ...
 
 
